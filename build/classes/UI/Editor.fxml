@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="739.0" prefWidth="1121.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.Editor">
+   <children>
+      <JFXTextArea fx:id="editor" focusColor="#224cc9" layoutX="108.0" layoutY="68.0" onKeyPressed="#keyPressed" prefHeight="430.0" prefWidth="680.0" style="-fx-background-color: #7ABAC7;" unFocusColor="#eb0f0f" />
+      <Label fx:id="text" layoutX="23.0" layoutY="14.0" text="Text Area" textFill="#090752" />
+      <Label layoutX="414.0" layoutY="25.0" text="Client">
+         <font>
+            <Font name="System Bold" size="15.0" />
+         </font>
+      </Label>
+      <JFXButton layoutX="76.0" layoutY="522.0" onMouseClicked="#CompileCode" text="Compile" />
+      <Label fx:id="C" layoutX="23.0" layoutY="96.0" onMouseClicked="#ClickC" text="C" />
+      <Label fx:id="CPP" layoutX="23.0" layoutY="128.0" onMouseClicked="#ClickCpp" text="C++" />
+      <Label fx:id="JAVA" layoutX="28.0" layoutY="161.0" onMouseClicked="#Clickjava" text="java" />
+      <JFXTextArea fx:id="Input" layoutX="816.0" layoutY="85.0" prefHeight="108.0" prefWidth="255.0" />
+      <JFXTextArea fx:id="Output" layoutX="825.0" layoutY="245.0" prefHeight="108.0" prefWidth="255.0" />
+      <Label layoutX="816.0" layoutY="36.0" text="Input" />
+      <Label layoutX="816.0" layoutY="202.0" text="Output" />
+      <JFXButton layoutX="108.0" layoutY="31.0" onMouseClicked="#Activate" text="Acivate" />
+   </children>
+</AnchorPane>
