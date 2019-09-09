@@ -72,9 +72,9 @@ public class Login implements Initializable {
     void Login(ActionEvent event) throws IOException, ClassNotFoundException, SQLException {
 
         Class.forName("com.mysql.jdbc.Driver");
-        String url = "jdbc:mysql://localhost:3306/Users";
+        String url = "jdbc:mysql://localhost:3306/users";
         Connection connection = DriverManager.getConnection(url, "root", "");
-        String query3 = "SELECT * FROM user1";
+        String query3 = "SELECT * FROM users";
         PreparedStatement preStat = connection.prepareStatement(query3);
         int status = 0;
         ResultSet result = preStat.executeQuery();
@@ -83,13 +83,16 @@ public class Login implements Initializable {
             String pass = result.getString("password");
             if ((username.equals(UserName.getText())) && (pass.equals(Password.getText()))) {
                 status = 1;
+                System.out.println("Login successfull");
                 break;
             }
         }
         if (status == 1) {
+            Profile.current_user=UserName.getText();
             Parent root = FXMLLoader.load(getClass().getResource("UI.Profile.fxml"));
             Scene scene = new Scene(root);
             Stage stg = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stg.resizableProperty().setValue(Boolean.FALSE);
             stg.hide();
             stg.setScene(scene);
             stg.show();
@@ -99,9 +102,11 @@ public class Login implements Initializable {
 
     @FXML
     void OnSighUp(MouseEvent event) throws IOException {
+        System.out.println("start Signup");
         Parent root = FXMLLoader.load(getClass().getResource("UI.Signup.fxml"));
         Scene scene = new Scene(root);
         Stage stg = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stg.resizableProperty().setValue(Boolean.FALSE);
         stg.hide();
         stg.setScene(scene);
         stg.show();

@@ -9,8 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<fx:root id="AnchorPane" prefHeight="659.0" prefWidth="987.0" style="-fx-background-color: #2F3445;" type="AnchorPane" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="Controller.Signup">
+<AnchorPane id="AnchorPane" prefHeight="659.0" prefWidth="987.0" style="-fx-background-color: #2F3445;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.Signup">
    <children>
       <JFXTextField fx:id="Name" focusColor="#304abf" layoutX="599.0" layoutY="195.0" unFocusColor="WHITE" />
       <Label layoutX="432.0" layoutY="210.0" text="Name" textFill="WHITE">
@@ -36,15 +35,20 @@
          </font>
       </Label>
       <JFXPasswordField fx:id="Confpassword" focusColor="#304abf" layoutX="599.0" layoutY="360.0" unFocusColor="WHITE" />
-      <JFXButton layoutX="538.0" layoutY="472.0" style="-fx-background-color: #1E93F1;" text="Create Account" />
-      <AnchorPane prefHeight="659.0" prefWidth="421.0" style="-fx-background-color: #3C5F8A;">
+      <JFXButton fx:id="AddUser" layoutX="562.0" layoutY="472.0" onAction="#CreateAccount" style="-fx-background-color: #1E93F1;" text="Create Account" />
+      <AnchorPane prefHeight="659.0" prefWidth="378.0" style="-fx-background-color: #3C5F8A;">
          <children>
             <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="111.0" layoutY="121.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../JavaFX1/src/javafx1/c1953215-5a14-42bd-8d48-6252a06fa214_200x200.png" />
                </image>
             </ImageView>
+            <Label layoutX="64.0" layoutY="319.0" text="Open Source TextEditor" textFill="#2f3445">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </children>
-</fx:root>
+</AnchorPane>

@@ -12,6 +12,7 @@ package Controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXPasswordField;
 import com.jfoenix.controls.JFXTextField;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -20,7 +21,12 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 public class Signup implements Initializable {
 
@@ -39,14 +45,21 @@ public class Signup implements Initializable {
     private JFXButton AddUser;
 
     @FXML
-    void CreateAccount(ActionEvent event) throws ClassNotFoundException, SQLException {
+    void CreateAccount(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
         if(Password.getText().equals(Confpassword.getText())){
             Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/Users";
+            String url = "jdbc:mysql://localhost:3306/users";
             Connection connection = DriverManager.getConnection(url, "root", "");
-            String query1 = "INSERT INTO `user1` (`name`,`username`,`password`)" + " VALUES ('" + Name.getText() + "', '" + Email.getText() + "','" + Password.getText() + "')";
+            String query1 = "INSERT INTO `users` (`email`,`name`,`password`)" + " VALUES ('" + Email.getText() + "', '" + Name.getText() + "','" + Password.getText() + "')";
             PreparedStatement preStat = connection.prepareStatement(query1);
             preStat.executeUpdate();
+            System.out.println("new user created");
+            Parent root = FXMLLoader.load(getClass().getResource("UI.Login.fxml"));
+            Scene scene = new Scene(root);
+            Stage stg = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stg.hide();
+            stg.setScene(scene);
+            stg.show();
         }
         else
         {

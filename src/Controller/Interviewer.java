@@ -259,7 +259,7 @@ public class Interviewer implements Initializable {
         CPP.setTextFill(Color.web("#000000"));
         if(editorStatus==0)
         {
-            readMessage.start();
+//            readMessage.start();
             editorStatus=1;
         }
     }
