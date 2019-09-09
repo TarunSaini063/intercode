@@ -35,15 +35,27 @@
             <Font size="24.0" />
          </font>
       </Label>
-      <JFXTextField fx:id="Name" focusColor="#304abf" layoutX="493.0" layoutY="115.0" prefHeight="31.0" prefWidth="294.0" unFocusColor="#2509dd" />
-      <JFXTextField fx:id="Address1" focusColor="#304abf" layoutX="493.0" layoutY="277.0" prefHeight="31.0" prefWidth="439.0" unFocusColor="#2509dd" />
-      <JFXTextField fx:id="Address2" focusColor="#304abf" layoutX="491.0" layoutY="325.0" prefHeight="31.0" prefWidth="439.0" unFocusColor="#2509dd" />
+      <JFXTextField fx:id="Name" focusColor="#304abf" layoutX="490.0" layoutY="111.0" prefHeight="31.0" prefWidth="294.0" unFocusColor="#2509dd">
+         <font>
+            <Font size="18.0" />
+         </font></JFXTextField>
+      <JFXTextField fx:id="Address1" focusColor="#304abf" layoutX="493.0" layoutY="277.0" prefHeight="31.0" prefWidth="439.0" unFocusColor="#2509dd">
+         <font>
+            <Font size="18.0" />
+         </font></JFXTextField>
+      <JFXTextField fx:id="Address2" focusColor="#304abf" layoutX="491.0" layoutY="325.0" prefHeight="31.0" prefWidth="439.0" unFocusColor="#2509dd">
+         <font>
+            <Font size="18.0" />
+         </font></JFXTextField>
       <Label layoutX="455.0" layoutY="383.0" text="GitHub" textFill="WHITE">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <JFXTextField fx:id="Github" focusColor="#304abf" layoutX="556.0" layoutY="427.0" prefHeight="31.0" prefWidth="439.0" unFocusColor="#2509dd" />
+      <JFXTextField fx:id="Github" focusColor="#304abf" layoutX="556.0" layoutY="427.0" prefHeight="31.0" prefWidth="439.0" unFocusColor="#2509dd">
+         <font>
+            <Font size="18.0" />
+         </font></JFXTextField>
       <ImageView fitHeight="44.0" fitWidth="49.0" layoutX="532.0" layoutY="383.0">
          <image>
             <Image url="@../Image/github.png" />
@@ -59,21 +71,36 @@
             <Image url="@../Image/linkedin.png" />
          </image>
       </ImageView>
-      <JFXTextField fx:id="Linkedin" focusColor="#304abf" layoutX="556.0" layoutY="513.0" prefHeight="31.0" prefWidth="439.0" unFocusColor="#2509dd" />
-      <JFXTextField fx:id="Email" focusColor="#304abf" layoutX="493.0" layoutY="161.0" prefHeight="31.0" prefWidth="294.0" unFocusColor="#2509dd" />
-      <JFXTextField fx:id="Mobile" focusColor="#304abf" layoutX="493.0" layoutY="217.0" prefHeight="31.0" prefWidth="294.0" unFocusColor="#2509dd" />
+      <JFXTextField fx:id="Linkedin" focusColor="#304abf" layoutX="556.0" layoutY="513.0" prefHeight="31.0" prefWidth="439.0" unFocusColor="#2509dd">
+         <font>
+            <Font size="18.0" />
+         </font></JFXTextField>
+      <JFXTextField fx:id="Email" focusColor="#304abf" layoutX="490.0" layoutY="157.0" prefHeight="31.0" prefWidth="294.0" unFocusColor="#2509dd">
+         <font>
+            <Font size="18.0" />
+         </font></JFXTextField>
+      <JFXTextField fx:id="Mobile" focusColor="#304abf" layoutX="493.0" layoutY="213.0" prefHeight="31.0" prefWidth="294.0" unFocusColor="#2509dd">
+         <font>
+            <Font size="18.0" />
+         </font></JFXTextField>
       <Label layoutX="255.0" layoutY="562.0" text="Skills :" textFill="WHITE">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <JFXTextField fx:id="Skill" focusColor="#304abf" layoutX="493.0" layoutY="564.0" prefHeight="31.0" prefWidth="535.0" unFocusColor="#2509dd" />
+      <JFXTextField fx:id="Skill" focusColor="#304abf" layoutX="493.0" layoutY="564.0" prefHeight="31.0" prefWidth="535.0" unFocusColor="#2509dd">
+         <font>
+            <Font size="18.0" />
+         </font></JFXTextField>
       <Label layoutX="247.0" layoutY="616.0" text="Qualification :" textFill="WHITE">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
-      <JFXTextField fx:id="Qualification" focusColor="#304abf" layoutX="493.0" layoutY="618.0" prefHeight="31.0" prefWidth="535.0" unFocusColor="#2509dd" />
+      <JFXTextField fx:id="Qualification" focusColor="#304abf" layoutX="493.0" layoutY="618.0" prefHeight="31.0" prefWidth="535.0" unFocusColor="#2509dd">
+         <font>
+            <Font size="18.0" />
+         </font></JFXTextField>
       <JFXButton fx:id="Save" layoutX="557.0" layoutY="672.0" onAction="#Saveprofile" style="-fx-background-color: #1E93F1;" text="Save Profile" textFill="WHITE">
          <font>
             <Font size="18.0" />

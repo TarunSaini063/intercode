@@ -152,10 +152,12 @@ public class Profile implements Initializable {
         Address1.setStyle("-fx-text-inner-color: white");
         Address2.setStyle("-fx-text-inner-color: white");
         watiforinterviewee.setStyle("-fx-text-inner-color: white");
+        Name.setDisable(true);
+        Email.setDisable(true);
         System.out.println("Finding Current user");
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
+            Class.forName("com.mysql.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -186,15 +188,14 @@ public class Profile implements Initializable {
                 if (current_user.equals(email)) {
                     Name.setText(result.getString("name"));
                     Github.setText(result.getString("github"));
-                    Linkedin.setText(result.getString("linkein"));
+                    Linkedin.setText(result.getString("linkedin"));
                     Address1.setText(result.getString("address1"));
                     Address2.setText(result.getString("address2"));
                     Skill.setText(result.getString("skill"));
                     Qualification.setText(result.getString("qualification"));
                     Mobile.setText(result.getString("mobile"));
+                    Email.setText(email);
                     System.out.println("Current user caught");
-                    Name.setDisable(true);
-                    Email.setDisable(true);
                     break;
                 }
             }

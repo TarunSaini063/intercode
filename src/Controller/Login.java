@@ -83,7 +83,8 @@ public class Login implements Initializable {
         while (result.next()) {
             String username = result.getString("email");
             String pass = result.getString("password");
-            System.out.println("checking "+username+" pass "+pass);
+            System.out.println("Username= "+username);
+            System.out.println(" pass= "+pass);
             if ((username.equals(UserName.getText())) && (pass.equals(Password.getText()))) {
                 status = 1;
                 System.out.println("Login successfull");
@@ -104,7 +105,6 @@ public class Login implements Initializable {
         {
             System.out.println("new User");
         }
-
     }
 
     @FXML
