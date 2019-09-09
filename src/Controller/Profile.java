@@ -105,9 +105,9 @@ public class Profile implements Initializable {
                 Interviewer.ss = new Socket("localhost", 3000);
                 if (Interviewer.ss != null) {
                     System.out.println("server connected");
-                    Parent root = FXMLLoader.load(getClass().getResource("UI.Interviewer.fxml"));
+                    Parent root = FXMLLoader.load(getClass().getResource("/UI/Interviewer.fxml"));
                     Scene scene = new Scene(root);
-                    scene.getStylesheets().add(KeywordsAsync.class.getResource("UI.keywords.css").toExternalForm());
+                    scene.getStylesheets().add(KeywordsAsync.class.getResource("/UI/keywords.css").toExternalForm());
                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                     stage.hide();
                     stage.setScene(scene);
@@ -130,9 +130,9 @@ public class Profile implements Initializable {
         Interviewee.s = Interviewee.ss.accept();
         Interviewee.dis = new DataInputStream(Interviewee.s.getInputStream());
         Interviewee.dos = new DataOutputStream(Interviewee.s.getOutputStream());
-        Parent root = FXMLLoader.load(getClass().getResource("UI.Interviewer.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/UI/Interviewer.fxml"));
         Scene scene = new Scene(root);
-        scene.getStylesheets().add(KeywordsAsync.class.getResource("UI.keywords.css").toExternalForm());
+        scene.getStylesheets().add(KeywordsAsync.class.getResource("/UI/keywords.css").toExternalForm());
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.hide();
         stage.setScene(scene);
@@ -155,7 +155,7 @@ public class Profile implements Initializable {
         System.out.println("Finding Current user");
 
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
         }

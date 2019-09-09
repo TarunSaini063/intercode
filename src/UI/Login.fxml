@@ -47,7 +47,7 @@
             <Font size="18.0" />
          </font>
       </JFXCheckBox>
-      <JFXButton fx:id="Login" layoutX="555.0" layoutY="501.0" prefHeight="42.0" prefWidth="81.0" style="-fx-background-color: #1E93F1;" text="Login" textFill="WHITE" />
+      <JFXButton fx:id="Login" layoutX="555.0" layoutY="501.0" onAction="#Login" prefHeight="42.0" prefWidth="81.0" style="-fx-background-color: #1E93F1;" text="Login" textFill="WHITE" />
       <Label fx:id="Forgot" layoutX="428.0" layoutY="568.0" prefHeight="42.0" prefWidth="161.0" text="Forgot Password ?" textFill="WHITE" underline="true">
          <font>
             <Font size="18.0" />

@@ -47,14 +47,14 @@ public class Signup implements Initializable {
     @FXML
     void CreateAccount(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
         if(Password.getText().equals(Confpassword.getText())){
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName("com.mysql.cj.jdbc.Driver");
             String url = "jdbc:mysql://localhost:3306/users";
             Connection connection = DriverManager.getConnection(url, "root", "");
             String query1 = "INSERT INTO `users` (`email`,`name`,`password`)" + " VALUES ('" + Email.getText() + "', '" + Name.getText() + "','" + Password.getText() + "')";
             PreparedStatement preStat = connection.prepareStatement(query1);
             preStat.executeUpdate();
             System.out.println("new user created");
-            Parent root = FXMLLoader.load(getClass().getResource("UI.Login.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/UI/Login.fxml"));
             Scene scene = new Scene(root);
             Stage stg = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stg.hide();

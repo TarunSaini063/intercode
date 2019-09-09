@@ -66,11 +66,13 @@ public class Login implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        UserName.setStyle("-fx-text-inner-color: white");
+        Password.setStyle("-fx-text-inner-color: white");
     }
 
     @FXML
     void Login(ActionEvent event) throws IOException, ClassNotFoundException, SQLException {
-
+        System.out.println("Try to connect database again");
         Class.forName("com.mysql.jdbc.Driver");
         String url = "jdbc:mysql://localhost:3306/users";
         Connection connection = DriverManager.getConnection(url, "root", "");
@@ -79,8 +81,9 @@ public class Login implements Initializable {
         int status = 0;
         ResultSet result = preStat.executeQuery();
         while (result.next()) {
-            String username = result.getString("username");
+            String username = result.getString("email");
             String pass = result.getString("password");
+            System.out.println("checking "+username+" pass "+pass);
             if ((username.equals(UserName.getText())) && (pass.equals(Password.getText()))) {
                 status = 1;
                 System.out.println("Login successfull");
@@ -89,7 +92,7 @@ public class Login implements Initializable {
         }
         if (status == 1) {
             Profile.current_user=UserName.getText();
-            Parent root = FXMLLoader.load(getClass().getResource("UI.Profile.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("/UI/Profile.fxml"));
             Scene scene = new Scene(root);
             Stage stg = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stg.resizableProperty().setValue(Boolean.FALSE);
@@ -97,13 +100,17 @@ public class Login implements Initializable {
             stg.setScene(scene);
             stg.show();
         }
+        else
+        {
+            System.out.println("new User");
+        }
 
     }
 
     @FXML
     void OnSighUp(MouseEvent event) throws IOException {
         System.out.println("start Signup");
-        Parent root = FXMLLoader.load(getClass().getResource("UI.Signup.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/UI/Signup.fxml"));
         Scene scene = new Scene(root);
         Stage stg = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stg.resizableProperty().setValue(Boolean.FALSE);

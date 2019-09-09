@@ -20,7 +20,7 @@ public class InterCode extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         stage.resizableProperty().setValue(Boolean.FALSE);
-        Parent root = FXMLLoader.load(getClass().getResource("Controller.Login.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/UI/Login.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
