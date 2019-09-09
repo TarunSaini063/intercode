@@ -98,13 +98,13 @@ public class Profile implements Initializable {
 
     @FXML
     void takeInterview(ActionEvent event) throws InterruptedException, IOException {
-        watiforinterviewee.setText("Wating for Interviewee");
-        Interviewer.ss = null;
-        while (true) {
-            try {
-                Interviewer.ss = new Socket("localhost", 3000);
-                if (Interviewer.ss != null) {
-                    System.out.println("server connected");
+//        watiforinterviewee.setText("Wating for Interviewee");
+//        Interviewer.ss = null;
+//        while (true) {
+//            try {
+//                Interviewer.ss = new Socket("localhost", 3000);
+//                if (Interviewer.ss != null) {
+//                    System.out.println("server connected");
                     Parent root = FXMLLoader.load(getClass().getResource("/UI/Interviewer.fxml"));
                     Scene scene = new Scene(root);
                     scene.getStylesheets().add(KeywordsAsync.class.getResource("/UI/keywords.css").toExternalForm());
@@ -113,14 +113,14 @@ public class Profile implements Initializable {
                     stage.setScene(scene);
                     stage.setTitle("InterCode");
                     stage.show();
-                    break;
-                }
-            } catch (IOException e) {
-                Thread.sleep(1000);
-            }
-        }
-        Interviewer.dis = new DataInputStream(Interviewer.ss.getInputStream());
-        Interviewer.dos = new DataOutputStream(Interviewer.ss.getOutputStream());
+//                    break;
+//                }
+//            } catch (IOException e) {
+//                Thread.sleep(1000);
+//            }
+//        }
+//        Interviewer.dis = new DataInputStream(Interviewer.ss.getInputStream());
+//        Interviewer.dos = new DataOutputStream(Interviewer.ss.getOutputStream());
     }
 
     @FXML

@@ -10,7 +10,7 @@
 <?import javafx.scene.text.Font?>
 <?import org.fxmisc.richtext.CodeArea?>
 
-<AnchorPane id="AnchorPane" prefHeight="933.0" prefWidth="1355.0" style="-fx-background-color: #2F3445;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane id="AnchorPane" prefHeight="933.0" prefWidth="1355.0" style="-fx-background-color: #2F3445;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.Interviewee" >
    <children>
       <Label fx:id="C" layoutX="54.0" layoutY="131.0" onMouseClicked="#onclickC" prefHeight="27.0" prefWidth="25.0" style="-fx-background-color: #F0F0F0;" text=" C" textFill="#2f3445">
          <font>
