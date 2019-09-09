@@ -34,12 +34,12 @@
       </JFXPasswordField>
       <ImageView layoutX="299.0" layoutY="318.0">
          <image>
-            <Image url="@../../../../../AppData/Local/Temp/icons8_user_40px_3.png" />
+            <Image url="@../Image/icons8_user_40px_3.png" />
          </image>
       </ImageView>
       <ImageView layoutX="295.0" layoutY="397.0">
          <image>
-            <Image url="@../../../../../AppData/Local/Temp/icons8_lock_2_40px.png" />
+            <Image url="@../Image/icons8_lock_2_40px.png" />
          </image>
       </ImageView>
       <JFXCheckBox fx:id="Remember" layoutX="350.0" layoutY="508.0" text="Remember me" textFill="WHITE">
