@@ -105,7 +105,7 @@ public class Profile implements Initializable {
 //                Interviewer.ss = new Socket("localhost", 3000);
 //                if (Interviewer.ss != null) {
 //                    System.out.println("server connected");
-                    Parent root = FXMLLoader.load(getClass().getResource("/UI/Interviewer.fxml"));
+                    Parent root = FXMLLoader.load(getClass().getResource("/UI/InterViewer.fxml"));
                     Scene scene = new Scene(root);
                     scene.getStylesheets().add(KeywordsAsync.class.getResource("/UI/keywords.css").toExternalForm());
                     Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
