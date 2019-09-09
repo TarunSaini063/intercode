@@ -35,7 +35,7 @@
          </font>
       </Label>
       <JFXPasswordField fx:id="Confpassword" focusColor="#304abf" layoutX="599.0" layoutY="360.0" unFocusColor="WHITE" />
-      <JFXButton layoutX="562.0" layoutY="472.0" style="-fx-background-color: #1E93F1;" text="Create Account" />
+      <JFXButton fx:id="AddUser" layoutX="562.0" layoutY="472.0" onAction="#CreateAccount" style="-fx-background-color: #1E93F1;" text="Create Account" />
       <AnchorPane prefHeight="659.0" prefWidth="378.0" style="-fx-background-color: #3C5F8A;">
          <children>
             <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="111.0" layoutY="121.0" pickOnBounds="true" preserveRatio="true">

@@ -22,12 +22,12 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <JFXTextField focusColor="#304abf" layoutX="350.0" layoutY="309.0" prefHeight="42.0" prefWidth="334.0" promptText="Username" unFocusColor="#2509dd">
+      <JFXTextField fx:id="UserName" focusColor="#304abf" layoutX="350.0" layoutY="309.0" prefHeight="42.0" prefWidth="334.0" promptText="Username" unFocusColor="#2509dd">
          <font>
             <Font size="18.0" />
          </font>
       </JFXTextField>
-      <JFXPasswordField layoutX="350.0" layoutY="396.0" prefHeight="31.0" prefWidth="345.0" promptText="Password" unFocusColor="#2509dd">
+      <JFXPasswordField fx:id="Password" layoutX="350.0" layoutY="396.0" prefHeight="31.0" prefWidth="345.0" promptText="Password" unFocusColor="#2509dd">
          <font>
             <Font size="18.0" />
          </font>

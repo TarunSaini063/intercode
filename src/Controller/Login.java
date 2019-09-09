@@ -16,9 +16,17 @@ package Controller;
  */
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXCheckBox;
+import com.jfoenix.controls.JFXPasswordField;
+import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -41,7 +49,11 @@ public class Login implements Initializable {
      */
     @FXML
     private JFXButton Signup;
+    @FXML
+    private JFXTextField UserName;
 
+    @FXML
+    private JFXPasswordField Password;
     @FXML
     private JFXCheckBox Remember;
 
@@ -54,6 +66,35 @@ public class Login implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+    }
+
+    @FXML
+    void Login(ActionEvent event) throws IOException, ClassNotFoundException, SQLException {
+
+        Class.forName("com.mysql.jdbc.Driver");
+        String url = "jdbc:mysql://localhost:3306/Users";
+        Connection connection = DriverManager.getConnection(url, "root", "");
+        String query3 = "SELECT * FROM user1";
+        PreparedStatement preStat = connection.prepareStatement(query3);
+        int status = 0;
+        ResultSet result = preStat.executeQuery();
+        while (result.next()) {
+            String username = result.getString("username");
+            String pass = result.getString("password");
+            if ((username.equals(UserName.getText())) && (pass.equals(Password.getText()))) {
+                status = 1;
+                break;
+            }
+        }
+        if (status == 1) {
+            Parent root = FXMLLoader.load(getClass().getResource("UI.Profile.fxml"));
+            Scene scene = new Scene(root);
+            Stage stg = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stg.hide();
+            stg.setScene(scene);
+            stg.show();
+        }
+
     }
 
     @FXML
