@@ -31,6 +31,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -318,12 +319,14 @@ public class Interviewee implements Initializable {
 
     @FXML
     void onwriting(KeyEvent event) {
-        final Pattern whiteSpace = Pattern.compile("^\\s+");
-        int caretPosition = editor.getCaretPosition();
-        int currentParagraph = editor.getCurrentParagraph();
-        Matcher m0 = whiteSpace.matcher(editor.getParagraph(currentParagraph - 1).getSegments().get(0));
-        if (m0.find()) {
-            Platform.runLater(() -> editor.insertText(caretPosition, m0.group()));
+        if (event.getCode() == KeyCode.ENTER) {
+            final Pattern whiteSpace = Pattern.compile("^\\s+");
+            int caretPosition = editor.getCaretPosition();
+            int currentParagraph = editor.getCurrentParagraph();
+            Matcher m0 = whiteSpace.matcher(editor.getParagraph(currentParagraph - 1).getSegments().get(0));
+            if (m0.find()) {
+                Platform.runLater(() -> editor.insertText(caretPosition, m0.group()));
+            }
         }
     }
 

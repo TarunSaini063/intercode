@@ -36,6 +36,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -226,10 +227,9 @@ public class Interviewer implements Initializable {
         CPP.setTextFill(Color.web("#000000"));
         JAVA.setTextFill(Color.web("#000000"));
         C.setTextFill(Color.web("#ff0000"));
-        if(editorStatus==0)
-        {
+        if (editorStatus == 0) {
             //readMessage.start();
-            editorStatus=1;
+            editorStatus = 1;
         }
     }
 
@@ -241,10 +241,9 @@ public class Interviewer implements Initializable {
         CPP.setTextFill(Color.web("#ff0000"));
         C.setTextFill(Color.web("#000000"));
         JAVA.setTextFill(Color.web("#000000"));
-        if(editorStatus==0)
-        {
+        if (editorStatus == 0) {
             //readMessage.start();
-            editorStatus=1;
+            editorStatus = 1;
         }
 
     }
@@ -257,19 +256,17 @@ public class Interviewer implements Initializable {
         JAVA.setTextFill(Color.web("#ff0000"));
         C.setTextFill(Color.web("#000000"));
         CPP.setTextFill(Color.web("#000000"));
-        if(editorStatus==0)
-        {
+        if (editorStatus == 0) {
 //            readMessage.start();
-            editorStatus=1;
+            editorStatus = 1;
         }
     }
 
     @FXML
     void onclickPYTHON(MouseEvent event) {
-        if(editorStatus==0)
-        {
+        if (editorStatus == 0) {
             readMessage.start();
-            editorStatus=1;
+            editorStatus = 1;
         }
 
     }
@@ -285,7 +282,7 @@ public class Interviewer implements Initializable {
             System.out.println(input);
             writer.write(input);
         }
-        input=editor.getText();
+        input = editor.getText();
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream("C:\\Users\\TARUN\\Documents\\NetBeansProjects\\InterCode\\src\\Judge\\code.c"), "utf-8"))) {
             System.out.println(input);
@@ -341,14 +338,14 @@ public class Interviewer implements Initializable {
 
     @FXML
     void onwriting(KeyEvent event) {
-        final Pattern whiteSpace = Pattern.compile("^\\s+");
-        int caretPosition = editor.getCaretPosition();
-        int currentParagraph = editor.getCurrentParagraph();
-        if(currentParagraph==0)currentParagraph=2;
-        Matcher m0 = whiteSpace.matcher(editor.getParagraph(currentParagraph - 1).getSegments().get(0));
-        if (m0.find()) {
-            Platform.runLater(() -> editor.insertText(caretPosition, m0.group()));
-            //Subscription cleanupWhenNoLongerNeedIt = editor.multiPlainChanges().successionEnds(Duration.ofMillis(500)).subscribe(ignore -> editor.setStyleSpans(0, computeHighlighting(editor.getText())));
+        if (event.getCode() == KeyCode.ENTER) {
+            final Pattern whiteSpace = Pattern.compile("^\\s+");
+            int caretPosition = editor.getCaretPosition();
+            int currentParagraph = editor.getCurrentParagraph();
+            Matcher m0 = whiteSpace.matcher(editor.getParagraph(currentParagraph - 1).getSegments().get(0));
+            if (m0.find()) {
+                Platform.runLater(() -> editor.insertText(caretPosition, m0.group()));
+            }
         }
 //        try {
 //            dos.writeUTF(editor.getText());
