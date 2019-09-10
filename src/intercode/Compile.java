@@ -27,8 +27,8 @@ public class Compile {
 
     public boolean compileCORCPP(String CORCPP) {
         File dir = new File("C:/Users/TARUN/Documents/NetBeansProjects/InterCode/src/Judge");
-        String filename1 = "C:/Users/TARUN/Documents/NetBeansProjects/InterCode/src/Judge/Code.c";
-        String filename2 = "C:/Users/TARUN/Documents/NetBeansProjects/InterCode/src/Judge/Code.cpp";
+        String filename1 = "C:/Users/TARUN/Documents/NetBeansProjects/InterCode/src/Judge/code.c";
+        String filename2 = "C:/Users/TARUN/Documents/NetBeansProjects/InterCode/src/Judge/code.cpp";
         try {
             String exeName = "cFile";
             Process p;

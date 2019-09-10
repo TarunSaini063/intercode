@@ -220,30 +220,30 @@ public class Interviewer implements Initializable {
 
     @FXML
     void onclickC(MouseEvent event) {
-        String c = "#include<stdio.h>" + System.lineSeparator() + "int main(void){" + System.lineSeparator() + "    //Code" + System.lineSeparator() + "    Return 0;" + System.lineSeparator() + "}";
-        editor.replaceText(0, 0, c);
+        String c = "#include<stdio.h>" + System.lineSeparator() + "int main(void){" + System.lineSeparator() + "    //Code" + System.lineSeparator() + "    return 0;" + System.lineSeparator() + "}";
+        editor.replaceText(c);
         language = 1;
         CPP.setTextFill(Color.web("#000000"));
         JAVA.setTextFill(Color.web("#000000"));
         C.setTextFill(Color.web("#ff0000"));
         if(editorStatus==0)
         {
-            readMessage.start();
+            //readMessage.start();
             editorStatus=1;
         }
     }
 
     @FXML
     void onclickCPP(MouseEvent event) {
-        String c = "#include <iostream>" + System.lineSeparator() + "using namespace std;" + System.lineSeparator() + "int main(void){" + System.lineSeparator() + "    //Code" + System.lineSeparator() + "    Return 0;" + System.lineSeparator() + "}";
-        editor.replaceText(0, 0, c);
+        String c = "#include <iostream>" + System.lineSeparator() + "using namespace std;" + System.lineSeparator() + "int main(void){" + System.lineSeparator() + "    //Code" + System.lineSeparator() + "    return 0;" + System.lineSeparator() + "}";
+        editor.replaceText(c);
         language = 2;
         CPP.setTextFill(Color.web("#ff0000"));
         C.setTextFill(Color.web("#000000"));
         JAVA.setTextFill(Color.web("#000000"));
         if(editorStatus==0)
         {
-            readMessage.start();
+            //readMessage.start();
             editorStatus=1;
         }
 
@@ -253,7 +253,7 @@ public class Interviewer implements Initializable {
     void onclickJAVA(MouseEvent event) {
         String c = "import java.io.*" + System.lineSeparator() + "class Gochi {" + System.lineSeparator() + "    public static void main (String[] args) {" + System.lineSeparator() + "        //code;" + System.lineSeparator() + "	}" + System.lineSeparator() + "}";
         language = 3;
-        editor.replaceText(0, 0, c);
+        editor.replaceText(c);
         JAVA.setTextFill(Color.web("#ff0000"));
         C.setTextFill(Color.web("#000000"));
         CPP.setTextFill(Color.web("#000000"));
@@ -282,6 +282,12 @@ public class Interviewer implements Initializable {
         }
         try (Writer writer = new BufferedWriter(new OutputStreamWriter(
                 new FileOutputStream("C:\\Users\\TARUN\\Documents\\NetBeansProjects\\InterCode\\src\\Judge\\input.txt"), "utf-8"))) {
+            System.out.println(input);
+            writer.write(input);
+        }
+        input=editor.getText();
+        try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                new FileOutputStream("C:\\Users\\TARUN\\Documents\\NetBeansProjects\\InterCode\\src\\Judge\\code.c"), "utf-8"))) {
             System.out.println(input);
             writer.write(input);
         }
@@ -338,9 +344,11 @@ public class Interviewer implements Initializable {
         final Pattern whiteSpace = Pattern.compile("^\\s+");
         int caretPosition = editor.getCaretPosition();
         int currentParagraph = editor.getCurrentParagraph();
+        if(currentParagraph==0)currentParagraph=2;
         Matcher m0 = whiteSpace.matcher(editor.getParagraph(currentParagraph - 1).getSegments().get(0));
         if (m0.find()) {
             Platform.runLater(() -> editor.insertText(caretPosition, m0.group()));
+            //Subscription cleanupWhenNoLongerNeedIt = editor.multiPlainChanges().successionEnds(Duration.ofMillis(500)).subscribe(ignore -> editor.setStyleSpans(0, computeHighlighting(editor.getText())));
         }
 //        try {
 //            dos.writeUTF(editor.getText());

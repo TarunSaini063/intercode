@@ -1,10 +1,9 @@
 #include<stdio.h>
-int main(void)
-{
-    int n,i;
-    scanf("%d",&n);
-    for(i=0;i<n;i++)
-    printf("* ");
+int main(void){
+//int x;
+//scanf("%d",&x);
+//int i=0;
+//for(i=0;i<=x;i++)
+printf("Tarun\n");
     return 0;
-
-}
+}                                     
