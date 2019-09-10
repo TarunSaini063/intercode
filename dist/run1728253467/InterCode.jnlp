@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="InterCode.jar" size="97740" download="eager" />
+    <jar href="InterCode.jar" size="97669" download="eager" />
     <jar href="lib\jfoenix-8.0.8.jar" size="2708772" download="eager" />
     <jar href="lib\mysql-connector-java-5.1.13.jar" size="767492" download="eager" />
     <jar href="lib\richtextfx-0.10.2.jar" size="271266" download="eager" />

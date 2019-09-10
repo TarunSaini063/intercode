@@ -184,16 +184,18 @@ public class Interviewer implements Initializable {
         public void run() {
             while (true) {
                 try {
+                    System.out.println("wait for message");
                     String msg = dis.readUTF();
                     System.out.println("read message= " + msg);
                     setMess(msg);
                 } catch (IOException e) {
                     try {
+                        System.out.println("closing socket connection in thread");
                         ss.close();
                         dis.close();
                         dos.close();
                     } catch (IOException ex) {
-                        //Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+                        System.out.println("error in thread");
                     }
                 }
             }
@@ -228,6 +230,7 @@ public class Interviewer implements Initializable {
         JAVA.setTextFill(Color.web("#000000"));
         C.setTextFill(Color.web("#ff0000"));
         if (editorStatus == 0) {
+            System.out.print("start reading thread");
             readMessage.start();
             editorStatus = 1;
         }
@@ -242,7 +245,8 @@ public class Interviewer implements Initializable {
         C.setTextFill(Color.web("#000000"));
         JAVA.setTextFill(Color.web("#000000"));
         if (editorStatus == 0) {
-            //readMessage.start();
+            System.out.print("start reading thread");
+            readMessage.start();
             editorStatus = 1;
         }
 
@@ -257,7 +261,8 @@ public class Interviewer implements Initializable {
         C.setTextFill(Color.web("#000000"));
         CPP.setTextFill(Color.web("#000000"));
         if (editorStatus == 0) {
-//            readMessage.start();
+            System.out.print("start reading thread");
+            readMessage.start();
             editorStatus = 1;
         }
     }
@@ -350,7 +355,7 @@ public class Interviewer implements Initializable {
         try {
             dos.writeUTF(editor.getText());
             dos.flush();
-            System.out.println("send message: ");
+            System.out.println("send message: "+editor.getText());
         } catch (IOException ex) {
 //                Logger.getLogger(layoutController.class.getName()).log(Level.SEVERE, null, ex);
         }
