@@ -98,13 +98,13 @@ public class Profile implements Initializable {
 
     @FXML
     void takeInterview(ActionEvent event) throws InterruptedException, IOException {
-//        watiforinterviewee.setText("Wating for Interviewee");
-//        Interviewer.ss = null;
-//        while (true) {
-//            try {
-//                Interviewer.ss = new Socket("localhost", 3000);
-//                if (Interviewer.ss != null) {
-//                    System.out.println("server connected");
+        watiforinterviewee.setText("Wating for Interviewee");
+        Interviewer.ss = null;
+        while (true) {
+            try {
+                Interviewer.ss = new Socket("192.168.0.7", 3000);
+                if (Interviewer.ss != null) {
+                    System.out.println("server connected");
                     Parent root = FXMLLoader.load(getClass().getResource("/UI/InterViewer.fxml"));
                     Scene scene = new Scene(root);
                     scene.getStylesheets().add(KeywordsAsync.class.getResource("/UI/keywords.css").toExternalForm());
@@ -113,14 +113,14 @@ public class Profile implements Initializable {
                     stage.setScene(scene);
                     stage.setTitle("InterCode");
                     stage.show();
-//                    break;
-//                }
-//            } catch (IOException e) {
-//                Thread.sleep(1000);
-//            }
-//        }
-//        Interviewer.dis = new DataInputStream(Interviewer.ss.getInputStream());
-//        Interviewer.dos = new DataOutputStream(Interviewer.ss.getOutputStream());
+                    break;
+                }
+            } catch (IOException e) {
+                Thread.sleep(1000);
+            }
+        }
+        Interviewer.dis = new DataInputStream(Interviewer.ss.getInputStream());
+        Interviewer.dos = new DataOutputStream(Interviewer.ss.getOutputStream());
     }
 
     @FXML
@@ -130,7 +130,7 @@ public class Profile implements Initializable {
         Interviewee.s = Interviewee.ss.accept();
         Interviewee.dis = new DataInputStream(Interviewee.s.getInputStream());
         Interviewee.dos = new DataOutputStream(Interviewee.s.getOutputStream());
-        Parent root = FXMLLoader.load(getClass().getResource("/UI/Interviewer.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/UI/Interviewee.fxml"));
         Scene scene = new Scene(root);
         scene.getStylesheets().add(KeywordsAsync.class.getResource("/UI/keywords.css").toExternalForm());
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -152,6 +152,7 @@ public class Profile implements Initializable {
         Address1.setStyle("-fx-text-inner-color: white");
         Address2.setStyle("-fx-text-inner-color: white");
         watiforinterviewee.setStyle("-fx-text-inner-color: white");
+        watiforinterviewer.setStyle("-fx-text-inner-color: white");
         Name.setDisable(true);
         Email.setDisable(true);
         System.out.println("Finding Current user");

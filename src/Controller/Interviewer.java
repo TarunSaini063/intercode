@@ -169,7 +169,7 @@ public class Interviewer implements Initializable {
     );
 
     public void setMess(String msg) {
-        editor.appendText(msg);
+        editor.replaceText(msg);
         final Pattern whiteSpace = Pattern.compile("^\\s+");
         int caretPosition = editor.getCaretPosition();
         int currentParagraph = editor.getCurrentParagraph();
@@ -228,7 +228,7 @@ public class Interviewer implements Initializable {
         JAVA.setTextFill(Color.web("#000000"));
         C.setTextFill(Color.web("#ff0000"));
         if (editorStatus == 0) {
-            //readMessage.start();
+            readMessage.start();
             editorStatus = 1;
         }
     }
@@ -347,13 +347,13 @@ public class Interviewer implements Initializable {
                 Platform.runLater(() -> editor.insertText(caretPosition, m0.group()));
             }
         }
-//        try {
-//            dos.writeUTF(editor.getText());
-//            dos.flush();
-//            System.out.println("send message: ");
-//        } catch (IOException ex) {
-////                Logger.getLogger(layoutController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        try {
+            dos.writeUTF(editor.getText());
+            dos.flush();
+            System.out.println("send message: ");
+        } catch (IOException ex) {
+//                Logger.getLogger(layoutController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @Override

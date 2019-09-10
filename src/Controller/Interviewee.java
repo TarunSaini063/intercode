@@ -165,7 +165,7 @@ public class Interviewee implements Initializable {
     );
 
     public void setMess(String msg) {
-        editor.appendText(msg);
+        editor.replaceText(msg);
         final Pattern whiteSpace = Pattern.compile("^\\s+");
         int caretPosition = editor.getCaretPosition();
         int currentParagraph = editor.getCurrentParagraph();
