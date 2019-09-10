@@ -194,6 +194,7 @@ public class Interviewer implements Initializable {
                         ss.close();
                         dis.close();
                         dos.close();
+                        System.exit(0);
                     } catch (IOException ex) {
                         System.out.println("error in thread");
                     }
