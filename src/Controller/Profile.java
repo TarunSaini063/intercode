@@ -102,7 +102,7 @@ public class Profile implements Initializable {
         Interviewer.ss = null;
         while (true) {
             try {
-                Interviewer.ss = new Socket("192.168.0.7", 3000);
+                Interviewer.ss = new Socket("localhost", 3000);
                 if (Interviewer.ss != null) {
                     System.out.println("server connected");
                     Parent root = FXMLLoader.load(getClass().getResource("/UI/InterViewer.fxml"));

@@ -121,11 +121,6 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <JFXButton fx:id="givInterview" layoutX="433.0" layoutY="803.0" onAction="#giveInterview" style="-fx-background-color: #1E93F1;" text="Give Interview" textFill="WHITE">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </JFXButton>
       <Label fx:id="watiforinterviewer" layoutX="649.0" layoutY="809.0" prefHeight="21.0" prefWidth="164.0" textFill="WHITE">
          <font>
             <Font size="18.0" />

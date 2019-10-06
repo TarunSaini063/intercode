@@ -5,12 +5,10 @@
  */
 package Controller;
 
-import static Controller.Interviewee.dis;
+//import static Controller.Interviewee.dis;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
-import com.sun.javafx.scene.control.skin.TextAreaSkin;
-import com.sun.javafx.scene.text.HitInfo;
 import intercode.Compile;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -27,16 +25,14 @@ import java.time.Duration;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -168,40 +164,23 @@ public class Interviewer implements Initializable {
             + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
     );
 
-    public void setMess(String msg) {
-        editor.replaceText(msg);
-        final Pattern whiteSpace = Pattern.compile("^\\s+");
-        int caretPosition = editor.getCaretPosition();
-        int currentParagraph = editor.getCurrentParagraph();
-        Matcher m0 = whiteSpace.matcher(editor.getParagraph(currentParagraph - 1).getSegments().get(0));
-        if (m0.find()) {
-            Platform.runLater(() -> editor.insertText(caretPosition, m0.group()));
-        }
-    }
-
-    Thread readMessage = new Thread(new Runnable() {
+    Task task = new Task<Void>() {
         @Override
-        public void run() {
+        public Void call() throws Exception {
+            int i = 0;
             while (true) {
-                try {
-                    System.out.println("wait for message");
-                    String msg = dis.readUTF();
-                    System.out.println("read message= " + msg);
-                    setMess(msg);
-                } catch (IOException e) {
-                    try {
-                        System.out.println("closing socket connection in thread");
-                        ss.close();
-                        dis.close();
-                        dos.close();
-                        System.exit(0);
-                    } catch (IOException ex) {
-                        System.out.println("error in thread");
+                String msg = dis.readUTF();
+                System.out.println("read message= " + msg);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        editor.replaceText(msg);
                     }
-                }
+                });
+                Thread.sleep(100);
             }
         }
-    });
+    };
 
     @FXML
     void changesize(ActionEvent event) {
@@ -232,7 +211,10 @@ public class Interviewer implements Initializable {
         C.setTextFill(Color.web("#ff0000"));
         if (editorStatus == 0) {
             System.out.print("start reading thread");
-            readMessage.start();
+//            readMessage.start();
+            Thread th = new Thread(task);
+            th.setDaemon(true);
+            th.start();
             editorStatus = 1;
         }
     }
@@ -247,7 +229,10 @@ public class Interviewer implements Initializable {
         JAVA.setTextFill(Color.web("#000000"));
         if (editorStatus == 0) {
             System.out.print("start reading thread");
-            readMessage.start();
+//            readMessage.start();
+            Thread th = new Thread(task);
+            th.setDaemon(true);
+            th.start();
             editorStatus = 1;
         }
 
@@ -263,7 +248,10 @@ public class Interviewer implements Initializable {
         CPP.setTextFill(Color.web("#000000"));
         if (editorStatus == 0) {
             System.out.print("start reading thread");
-            readMessage.start();
+//            readMessage.start();
+            Thread th = new Thread(task);
+            th.setDaemon(true);
+            th.start();
             editorStatus = 1;
         }
     }
@@ -271,7 +259,10 @@ public class Interviewer implements Initializable {
     @FXML
     void onclickPYTHON(MouseEvent event) {
         if (editorStatus == 0) {
-            readMessage.start();
+//            readMessage.start();
+            Thread th = new Thread(task);
+            th.setDaemon(true);
+            th.start();
             editorStatus = 1;
         }
 
@@ -344,19 +335,10 @@ public class Interviewer implements Initializable {
 
     @FXML
     void onwriting(KeyEvent event) {
-        if (event.getCode() == KeyCode.ENTER) {
-            final Pattern whiteSpace = Pattern.compile("^\\s+");
-            int caretPosition = editor.getCaretPosition();
-            int currentParagraph = editor.getCurrentParagraph();
-            Matcher m0 = whiteSpace.matcher(editor.getParagraph(currentParagraph - 1).getSegments().get(0));
-            if (m0.find()) {
-                Platform.runLater(() -> editor.insertText(caretPosition, m0.group()));
-            }
-        }
         try {
             dos.writeUTF(editor.getText());
             dos.flush();
-            System.out.println("send message: "+editor.getText());
+            System.out.println("send message: " + editor.getText());
         } catch (IOException ex) {
 //                Logger.getLogger(layoutController.class.getName()).log(Level.SEVERE, null, ex);
         }

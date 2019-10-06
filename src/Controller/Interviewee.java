@@ -23,6 +23,7 @@ import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -31,7 +32,6 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -163,39 +163,23 @@ public class Interviewee implements Initializable {
             + "|(?<STRING>" + STRING_PATTERN + ")"
             + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
     );
-
-    public void setMess(String msg) {
-        editor.replaceText(msg);
-        final Pattern whiteSpace = Pattern.compile("^\\s+");
-        int caretPosition = editor.getCaretPosition();
-        int currentParagraph = editor.getCurrentParagraph();
-        Matcher m0 = whiteSpace.matcher(editor.getParagraph(currentParagraph - 1).getSegments().get(0));
-        if (m0.find()) {
-            Platform.runLater(() -> editor.insertText(caretPosition, m0.group()));
-        }
-    }
-    Thread readMessage = new Thread(new Runnable() {
+    Task task = new Task<Void>() {
         @Override
-        public void run() {
+        public Void call() throws Exception {
+            int i = 0;
             while (true) {
-                try {
-                    String msg = dis.readUTF();
-                    System.out.println("read message= " + msg);
-                    setMess(msg);
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    try {
-                        ss.close();
-                        dis.close();
-                        dos.close();
-                    } catch (IOException ex) {
-
+                String msg = dis.readUTF();
+                System.out.println("read message= " + msg);
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        editor.replaceText(msg);
                     }
-                }
+                });
+                Thread.sleep(100);
             }
         }
-    });
+    };
 
     @FXML
     void changesize(ActionEvent event) {
@@ -225,21 +209,38 @@ public class Interviewee implements Initializable {
     @FXML
     void onclickC(MouseEvent event) {
         String c = "#include<stdio.h>" + System.lineSeparator() + "int main(void){" + System.lineSeparator() + "    //Code" + System.lineSeparator() + "    Return 0;" + System.lineSeparator() + "}";
-        editor.replaceText(0, 0, c);
+        editor.replaceText(c);
         language = 1;
         CPP.setTextFill(Color.web("#000000"));
         JAVA.setTextFill(Color.web("#000000"));
         C.setTextFill(Color.web("#ff0000"));
+        if (editorStatus == 0) {
+            System.out.println("starting reading thread");
+//            readMessage.start();
+            Thread th = new Thread(task);
+            th.setDaemon(true);
+            th.start();
+            editorStatus = 1;
+        }
     }
+    private static int editorStatus = 0;
 
     @FXML
     void onclickCPP(MouseEvent event) {
         String c = "#include <iostream>" + System.lineSeparator() + "using namespace std;" + System.lineSeparator() + "int main(void){" + System.lineSeparator() + "    //Code" + System.lineSeparator() + "    Return 0;" + System.lineSeparator() + "}";
-        editor.replaceText(0, 0, c);
+        editor.replaceText(c);
         language = 2;
         CPP.setTextFill(Color.web("#ff0000"));
         C.setTextFill(Color.web("#000000"));
         JAVA.setTextFill(Color.web("#000000"));
+        if (editorStatus == 0) {
+            System.out.println("starting reading thread");
+//            readMessage.start();
+            Thread th = new Thread(task);
+            th.setDaemon(true);
+            th.start();
+            editorStatus = 1;
+        }
 
     }
 
@@ -247,10 +248,18 @@ public class Interviewee implements Initializable {
     void onclickJAVA(MouseEvent event) {
         String c = "import java.io.*" + System.lineSeparator() + "class Gochi {" + System.lineSeparator() + "    public static void main (String[] args) {" + System.lineSeparator() + "        //code;" + System.lineSeparator() + "	}" + System.lineSeparator() + "}";
         language = 3;
-        editor.replaceText(0, 0, c);
+        editor.replaceText(c);
         JAVA.setTextFill(Color.web("#ff0000"));
         C.setTextFill(Color.web("#000000"));
         CPP.setTextFill(Color.web("#000000"));
+        if (editorStatus == 0) {
+            System.out.println("starting reading thread");
+//            readMessage.start();
+            Thread th = new Thread(task);
+            th.setDaemon(true);
+            th.start();
+            editorStatus = 1;
+        }
     }
 
     @FXML
@@ -319,14 +328,12 @@ public class Interviewee implements Initializable {
 
     @FXML
     void onwriting(KeyEvent event) {
-        if (event.getCode() == KeyCode.ENTER) {
-            final Pattern whiteSpace = Pattern.compile("^\\s+");
-            int caretPosition = editor.getCaretPosition();
-            int currentParagraph = editor.getCurrentParagraph();
-            Matcher m0 = whiteSpace.matcher(editor.getParagraph(currentParagraph - 1).getSegments().get(0));
-            if (m0.find()) {
-                Platform.runLater(() -> editor.insertText(caretPosition, m0.group()));
-            }
+        try {
+            dos.writeUTF(editor.getText());
+            dos.flush();
+            System.out.println("send message: " + editor.getText());
+        } catch (IOException ex) {
+//                Logger.getLogger(layoutController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
