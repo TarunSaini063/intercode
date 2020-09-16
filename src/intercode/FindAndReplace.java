@@ -83,7 +83,7 @@ public class FindAndReplace {
             }
         }
     }
-
+    // Return list of world containing starting and ending index for highlighting
     public List<Pair<Integer, Integer>> getCordinates(String pat, String txt) {
         KMPSearch(pat, txt);
         return pairList;
