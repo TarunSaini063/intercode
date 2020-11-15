@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="lib1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/run602336058/lib/richtextfx-0.10.2.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/run602336058/lib/mysql-connector-java-5.1.13.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/run602336058/lib/jfoenix-8.0.8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/dist/run602336058/lib/richtextfx-fat-0.10.2.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

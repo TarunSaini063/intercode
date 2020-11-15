@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="InterCode1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/dist/InterCode.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

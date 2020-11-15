@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextArea?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import org.fxmisc.richtext.CodeArea?>
+
+<AnchorPane id="AnchorPane" prefHeight="933.0" prefWidth="1355.0" style="-fx-background-color: #2F3445;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.Interviewee" >
+   <children>
+      <Label fx:id="C" layoutX="54.0" layoutY="131.0" onMouseClicked="#onclickC" prefHeight="27.0" prefWidth="25.0" style="-fx-background-color: #F0F0F0;" text=" C" textFill="#2f3445">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="CPP" layoutX="55.0" layoutY="196.0" onMouseClicked="#onclickCPP" prefHeight="27.0" prefWidth="49.0" style="-fx-background-color: #F0F0F0;" text=" C++" textFill="#2f3445">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="JAVA" layoutX="55.0" layoutY="260.0" onMouseClicked="#onclickJAVA" prefHeight="27.0" prefWidth="49.0" style="-fx-background-color: #F0F0F0;" text=" Java" textFill="#2f3445">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label fx:id="PYTHON" layoutX="55.0" layoutY="319.0" onMouseClicked="#onclickPYTHON" prefHeight="27.0" prefWidth="74.0" style="-fx-background-color: #F0F0F0;" text=" Python" textFill="#2f3445">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <Label layoutX="839.0" layoutY="14.0" prefHeight="41.0" prefWidth="316.0" text="Texteditor" textFill="#9d8bf5">
+         <font>
+            <Font name="System Bold" size="36.0" />
+         </font>
+      </Label>
+      <JFXComboBox fx:id="frontsize" layoutX="1091.0" layoutY="87.0" onAction="#changesize" prefHeight="31.0" prefWidth="101.0" unFocusColor="#2f27c9" />
+      <JFXComboBox fx:id="fronttype" layoutX="1225.0" layoutY="87.0" onAction="#changetype" prefHeight="31.0" prefWidth="101.0" unFocusColor="#2f27c9" />
+      <ImageView fitHeight="90.0" fitWidth="101.0" layoutX="14.0" layoutY="856.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Image/chat_96px.png" />
+         </image>
+      </ImageView>
+      <JFXTextArea layoutX="1370.0" layoutY="132.0" prefHeight="245.0" prefWidth="517.0" style="-fx-background-color: #FFFFFF;" />
+      <Label layoutX="1368.0" layoutY="101.0" text="Input:" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <JFXTextArea layoutX="1370.0" layoutY="477.0" prefHeight="245.0" prefWidth="517.0" style="-fx-background-color: #FFFFFF;" />
+      <Label layoutX="1370.0" layoutY="438.0" text="Output:" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="compile" layoutX="1368.0" layoutY="746.0" onAction="#oncompile" style="-fx-background-color: #1E93F1;" text="Compile" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </JFXButton>
+      <JFXTextArea layoutX="189.0" layoutY="797.0" prefHeight="137.0" prefWidth="1144.0" />
+      <Label layoutX="189.0" layoutY="746.0" text="Question:" textFill="WHITE">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </Label>
+      <JFXButton fx:id="endinter" layoutX="1715.0" layoutY="14.0" onAction="#endinterview" style="-fx-background-color: #CEDBE6;" text="End Interview" textFill="#dd1a1a">
+         <font>
+            <Font size="24.0" />
+         </font>
+      </JFXButton>
+      <CodeArea fx:id="editor" layoutX="181.0" layoutY="132.0" onKeyPressed="#onwriting" prefHeight="591.0" prefWidth="1172.0" />
+      <Label layoutX="49.0" layoutY="77.0" text="Select Language" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>
