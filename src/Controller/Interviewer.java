@@ -7,10 +7,12 @@ package Controller;
 
 //import static Controller.Interviewee.dis;
 import Controller.KeywordsAsync;
+import Utilities.Trie;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXToggleButton;
+import com.sun.deploy.util.StringUtils;
 import intercode.Compile;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -26,35 +28,61 @@ import java.io.Writer;
 import java.net.Socket;
 import java.net.URL;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.ResourceBundle;
+import java.util.function.IntFunction;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static javafx.application.Application.setUserAgentStylesheet;
 import javafx.application.Platform;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
+import org.fxmisc.richtext.model.TwoDimensional.Bias;
+import org.fxmisc.richtext.model.TwoDimensional.Position;
+import org.reactfx.EventStream;
+import org.reactfx.EventStreams;
+import static org.reactfx.EventStreams.nonNullValuesOf;
 import org.reactfx.Subscription;
+import org.reactfx.value.Val;
+import static org.reactfx.value.Val.filter;
+import org.reactfx.value.Var;
 
 /**
  *
@@ -67,6 +95,11 @@ public class Interviewer implements Initializable {
     static DataOutputStream dos = null;
     Compile compiler = new Compile();
     static int editorStatus = 0;
+    private Stage stage;
+    BoundsPopup AutoComplete;
+    double caretXOffset = 0;
+    double caretYOffset = 0;
+    String currentWord = null;
     @FXML
     private Label C;
 
@@ -175,6 +208,86 @@ public class Interviewer implements Initializable {
             + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
     );
 
+    private class BoundsPopup extends Popup {
+
+        /**
+         * Indicates whether popup should still be shown even when its item
+         * (caret/selection) is outside viewport
+         */
+        private final Var<Boolean> showWhenItemOutsideViewport = Var.newSimpleVar(true);
+
+        public final EventStream<Boolean> outsideViewportValues() {
+            return showWhenItemOutsideViewport.values();
+        }
+
+        public final void invertViewportOption() {
+            showWhenItemOutsideViewport.setValue(!showWhenItemOutsideViewport.getValue());
+        }
+
+        /**
+         * Indicates whether popup has been hidden since its item
+         * (caret/selection) is outside viewport and should be shown when that
+         * item becomes visible again
+         */
+        private final Var<Boolean> hideTemporarily = Var.newSimpleVar(false);
+
+        public final boolean isHiddenTemporarily() {
+            return hideTemporarily.getValue();
+        }
+
+        public final void setHideTemporarily(boolean value) {
+            hideTemporarily.setValue(value);
+        }
+
+        public final void invertVisibility() {
+            if (isShowing()) {
+                hide();
+            } else {
+                show(stage);
+            }
+        }
+
+        private final VBox vbox;
+        private final Button button;
+
+        private final Label label;
+
+        public final void setText(String text) {
+            button.setText(text);
+        }
+
+        BoundsPopup(String buttonText) {
+            super();
+            button = new Button(buttonText);
+            label = new Label("Auto complete");
+            vbox = new VBox(button, label);
+            vbox.setBackground(new Background(new BackgroundFill(Color.ALICEBLUE, null, null)));
+            vbox.setPadding(new Insets(5));
+            getContent().add(vbox);
+        }
+    }
+
+    class ArrowFactory implements IntFunction<Node> {
+
+        private final ObservableValue<Integer> shownLine;
+
+        ArrowFactory(ObservableValue<Integer> shownLine) {
+            this.shownLine = shownLine;
+        }
+
+        @Override
+        public Node apply(int lineNumber) {
+            Polygon triangle = new Polygon(0.0, 0.0, 10.0, 5.0, 0.0, 10.0);
+            triangle.setFill(Color.GREEN);
+            ObservableValue<Boolean> visible = Val.map(
+                    shownLine,
+                    sl -> sl == lineNumber);
+
+            triangle.visibleProperty().bind(Val.conditionOnShowing(visible, triangle));
+            return triangle;
+        }
+    }
+
     Task task = new Task<Void>() {
         @Override
         public Void call() throws Exception {
@@ -222,9 +335,9 @@ public class Interviewer implements Initializable {
 
     @FXML
     void endinterview(ActionEvent event) throws IOException {
-        ss.close();
-        dis.close();
-        dos.close();
+//        ss.close();
+//        dis.close();
+//        dos.close();
         Parent root = FXMLLoader.load(getClass().getResource("/UI/Login.fxml"));
         Scene scene = new Scene(root);
         Stage stg = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -246,10 +359,11 @@ public class Interviewer implements Initializable {
         C.setTextFill(Color.web("#ff0000"));
         if (editorStatus == 0) {
             System.out.print("start reading thread");
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 //            readMessage.start();
             Thread th = new Thread(task);
             th.setDaemon(true);
-            th.start();
+            // th.start();
             editorStatus = 1;
         }
     }
@@ -265,6 +379,8 @@ public class Interviewer implements Initializable {
         if (editorStatus == 0) {
             System.out.print("start reading thread");
 //            readMessage.start();
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
             Thread th = new Thread(task);
             th.setDaemon(true);
             th.start();
@@ -285,6 +401,8 @@ public class Interviewer implements Initializable {
             System.out.print("start reading thread");
 //            readMessage.start();
             Thread th = new Thread(task);
+            stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
             th.setDaemon(true);
             th.start();
             editorStatus = 1;
@@ -366,23 +484,119 @@ public class Interviewer implements Initializable {
         }
     }
 
+    //Creating EventHandler Object   
+    EventHandler<KeyEvent> Tab_Filter = new EventHandler<KeyEvent>() {
+        @Override
+        public void handle(KeyEvent event) {
+            if (event.getCode() == KeyCode.TAB) {
+                String s = "        ";//Tab size=8
+                editor.insertText(editor.getCaretPosition(), s);
+                event.consume();
+            }
+        }
+    };
+    Pattern whiteSpace = Pattern.compile("^\\s+");
+    //Creating EventHandler Object   
+    EventHandler<KeyEvent> Indentation_filter = new EventHandler<KeyEvent>() {
+        @Override
+        public void handle(KeyEvent event) {
+            if (event.getCode() == KeyCode.ENTER) {
+                Matcher m = whiteSpace.matcher(editor.getParagraph(editor.getCurrentParagraph()).getSegments().get(0));
+                if (m.find()) {
+                    Platform.runLater(() -> editor.insertText(editor.getCaretPosition(), System.lineSeparator() + m.group()));
+                }
+                event.consume();
+            }
+        }
+    };
+    EventHandler<KeyEvent> AutoComplete_filter = new EventHandler<KeyEvent>() {
+        @Override
+        public void handle(KeyEvent event) {
+            if (event.isControlDown() && event.getCode() == KeyCode.SPACE && event.getCharacter() != " ") {
+                int nm = editor.caretColumnProperty().getValue();
+                System.out.println("AutoComplete\n" + "line number= " + nm + " " + editor.getCaretColumn());
+                Trie trie = new Trie(editor.getText());
+                List<String> words = new ArrayList<String>();
+                words = trie.getWordsForPrefix(currentWord);
+                String s = "";
+                for (String word : words) {
+                    s += word + ',';
+                }
+                if(s.length()>0)
+                    s = s.substring(0, s.length() - 1);
+                else s="No Match";
+                AutoComplete.setText(s);
+                AutoComplete.show(stage);
+                event.consume();
+            }
+        }
+    };
+
     @FXML
     void onwriting(KeyEvent event) {
-        try {
-            dos.writeUTF(editor.getText());
-            dos.flush();
-            System.out.println("send message: " + editor.getText());
-        } catch (IOException ex) {
-//                Logger.getLogger(layoutController.class.getName()).log(Level.SEVERE, null, ex);
+//        try {
+//            dos.writeUTF(editor.getText());
+//            dos.flush();
+//            System.out.println("send message: " + editor.getText());
+//        } catch (IOException ex) {
+////                Logger.getLogger(layoutController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+        if (AutoComplete.isShowing()) {
+            AutoComplete.invertVisibility();
         }
+//        System.out.println(currentWord);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        editor.setParagraphGraphicFactory(LineNumberFactory.get(editor));
+        IntFunction<Node> numberFactory = LineNumberFactory.get(editor);
+        IntFunction<Node> arrowFactory = new ArrowFactory(editor.currentParagraphProperty());
+        IntFunction<Node> graphicFactory = line -> {
+            HBox hbox = new HBox(
+                    numberFactory.apply(line),
+                    arrowFactory.apply(line));
+            hbox.setAlignment(Pos.CENTER_LEFT);
+            return hbox;
+        };
+        editor.setParagraphGraphicFactory(graphicFactory);
         Subscription cleanupWhenNoLongerNeedIt = editor.multiPlainChanges().successionEnds(Duration.ofMillis(500)).subscribe(ignore -> editor.setStyleSpans(0, computeHighlighting(editor.getText())));
         themes.setItems(availableThemes);
         editor.setStyle("-fx-font-size: 20px;");
+        editor.setWrapText(true);
+        editor.addEventFilter(KeyEvent.KEY_PRESSED, Tab_Filter);
+        editor.addEventFilter(KeyEvent.KEY_PRESSED, Indentation_filter);
+        editor.addEventFilter(KeyEvent.KEY_PRESSED, AutoComplete_filter);
+        AutoComplete = new BoundsPopup("I am the caret popup button!");
+        EventStream<Optional<Bounds>> caretBounds = nonNullValuesOf(editor.caretBoundsProperty());
+        Subscription caretPopupSub = EventStreams.combine(caretBounds, AutoComplete.outsideViewportValues())
+                .subscribe(tuple3 -> {
+                    Optional<Bounds> opt = tuple3._1;
+                    boolean showPopupWhenCaretOutside = tuple3._2;
+
+                    if (opt.isPresent()) {
+                        Bounds b = opt.get();
+                        AutoComplete.setX(b.getMaxX() + caretXOffset);
+                        AutoComplete.setY(b.getMaxY() + caretYOffset);
+
+                        if (AutoComplete.isHiddenTemporarily()) {
+                            AutoComplete.show(stage);
+                            AutoComplete.setHideTemporarily(false);
+                        }
+
+                    } else {
+                        if (!showPopupWhenCaretOutside) {
+                            AutoComplete.hide();
+                            AutoComplete.setHideTemporarily(true);
+                        }
+                    }
+                });
+        editor.caretPositionProperty().addListener((obs, oldPosition, newPosition) -> {
+            String text = editor.getText().substring(0, newPosition.intValue());
+            int index;
+            for (index = text.length() - 1; index >= 0 && !Character.isWhitespace(text.charAt(index)); index--);
+            String prefix = text.substring(index + 1, text.length());
+            currentWord = prefix;
+        });
     }
 
     private static StyleSpans<Collection<String>> computeHighlighting(String text) {
@@ -408,7 +622,7 @@ public class Interviewer implements Initializable {
                     : matcher.group("COMMENT") != null ? "comment"
                     : null;
             /* never happens */ assert styleClass != null;
-            System.out.println(styleClass);
+//            System.out.println(styleClass);
             spansBuilder.add(Collections.emptyList(), matcher.start() - lastKwEnd);
             spansBuilder.add(Collections.singleton(styleClass), matcher.end() - matcher.start());
             lastKwEnd = matcher.end();
