@@ -38,13 +38,13 @@ public class Trie {
     public Trie(String Document) {
         root = new TrieNode();
         String[] words = Document.split("\\W+");
-        System.out.println("Trie constructor : ");
+//        System.out.println("Trie constructor : ");
 
         for (String word : words) {
-            System.out.print(word + ", ");
+//            System.out.print(word + ", ");
             insert(word);  //insert all words
         }
-        System.out.println();
+//        System.out.println();
     }
 
     void insert(String word) {
@@ -71,11 +71,11 @@ public class Trie {
             current = node;
         }
         getWordsForPrefix(prefix, node);
-        System.out.println("Printing auto complete words prefix: " + prefix);
-        for (String s : words) {
-            System.out.print(s + ", ");
-        }
-        System.out.println();
+//        System.out.println("Printing auto complete words prefix: " + prefix);
+//        for (String s : words) {
+//            System.out.print(s + ", ");
+//        }
+//        System.out.println();
         return words;
     }
 
@@ -91,7 +91,7 @@ public class Trie {
         for (char ch = 'A'; ch <= 'Z'; ++ch) {
             node = current.getChildren().get(ch);
             if (node == null) {
-                break;
+                continue;
             }
             String next = new String(prefix + ch);
 //            System.out.println(next);
@@ -100,7 +100,7 @@ public class Trie {
         for (char ch = 'a'; ch <= 'z'; ++ch) {
             node = current.getChildren().get(ch);
             if (node == null) {
-                break;
+                continue;
             }
             String next = new String(prefix + ch);
 //            System.out.println(next);
@@ -110,7 +110,7 @@ public class Trie {
         for (char ch : remaning.toCharArray()) {
             node = current.getChildren().get(ch);
             if (node == null) {
-                break;
+                continue;
             }
             String next = new String(prefix + ch);
 //            System.out.println(next);
