@@ -7,24 +7,19 @@ package Controller;
 
 //import static Controller.Interviewee.dis;
 import Controller.KeywordsAsync;
+import Utilities.ScreenShoot;
 import Utilities.Trie;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
-import com.jfoenix.controls.JFXToggleButton;
-import com.sun.deploy.util.StringUtils;
 import intercode.Compile;
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 import java.net.Socket;
 import java.net.URL;
 import java.time.Duration;
@@ -33,14 +28,15 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.OptionalInt;
 import java.util.ResourceBundle;
 import java.util.function.IntFunction;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static javafx.application.Application.setUserAgentStylesheet;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
+import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -56,10 +52,8 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
@@ -69,21 +63,17 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
-import javafx.scene.text.Font;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
-import org.fxmisc.richtext.model.TwoDimensional.Bias;
-import org.fxmisc.richtext.model.TwoDimensional.Position;
 import org.reactfx.EventStream;
 import org.reactfx.EventStreams;
 import static org.reactfx.EventStreams.nonNullValuesOf;
 import org.reactfx.Subscription;
 import org.reactfx.value.Val;
-import static org.reactfx.value.Val.filter;
 import org.reactfx.value.Var;
 
 /**
@@ -376,7 +366,8 @@ public class Interviewer implements Initializable {
         Parent root = FXMLLoader.load(getClass().getResource("/UI/Login.fxml"));
         Scene scene = new Scene(root);
         Stage stg = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        stg.hide();
+        stg.close();
+        stg = new Stage();
         stg.setScene(scene);
         stg.resizableProperty().setValue(Boolean.FALSE);
         stg.show();
@@ -628,6 +619,7 @@ public class Interviewer implements Initializable {
             String prefix = text.substring(index + 1, text.length());
             currentWord = prefix;
         });
+
     }
 
     private static StyleSpans<Collection<String>> computeHighlighting(String text) {
