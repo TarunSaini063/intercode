@@ -40,6 +40,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static javafx.application.Application.setUserAgentStylesheet;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -57,6 +58,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -99,7 +101,7 @@ public class Interviewer implements Initializable {
     BoundsPopup AutoComplete;
     double caretXOffset = 0;
     double caretYOffset = 0;
-    String currentWord = null;
+    String currentWord = "";
     @FXML
     private Label C;
 
@@ -248,19 +250,52 @@ public class Interviewer implements Initializable {
         }
 
         private final VBox vbox;
-        private final Button button;
-
-        private final Label label;
+        private final ListView<String> button;
 
         public final void setText(String text) {
-            button.setText(text);
+            button.getItems().clear();
+            button.getItems().add("First Item");
+            button.getItems().add("Second Item");
+            button.getItems().add("Third Item");
         }
+
+        public final void setText(List<String> words) {
+            button.getItems().clear();
+            int ROW_HEIGHT = 24;
+            for (String s : words) {
+                button.getItems().add(s);
+            }
+            button.setPrefHeight(words.size() * ROW_HEIGHT + 2);
+        }
+        EventHandler<KeyEvent> Select_autoComplete = new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if (event.getCode() == KeyCode.ENTER) {
+                    String selectedItem = button.getSelectionModel().getSelectedItem();
+                    selectedItem = selectedItem.substring(currentWord.length());
+                    editor.insertText(editor.getCaretPosition(), selectedItem);
+                    AutoComplete.invertVisibility();
+                    event.consume();
+                }
+            }
+        };
+        EventHandler<MouseEvent> Select_autoComplete_Click = new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                String selectedItem = button.getSelectionModel().getSelectedItem();
+                editor.insertText(editor.getCaretPosition(), selectedItem);
+                AutoComplete.invertVisibility();
+                event.consume();
+            }
+        };
 
         BoundsPopup(String buttonText) {
             super();
-            button = new Button(buttonText);
-            label = new Label("Auto complete");
-            vbox = new VBox(button, label);
+            button = new ListView<String>();
+            button.getItems().add("");
+            button.addEventFilter(KeyEvent.KEY_PRESSED, Select_autoComplete);
+            button.addEventFilter(MouseEvent.MOUSE_CLICKED, Select_autoComplete_Click);
+            vbox = new VBox(button);
             vbox.setBackground(new Background(new BackgroundFill(Color.ALICEBLUE, null, null)));
             vbox.setPadding(new Insets(5));
             getContent().add(vbox);
@@ -518,14 +553,10 @@ public class Interviewer implements Initializable {
                 Trie trie = new Trie(editor.getText());
                 List<String> words = new ArrayList<String>();
                 words = trie.getWordsForPrefix(currentWord);
-                String s = "";
                 for (String word : words) {
-                    s += word + ',';
+                    System.out.println(word);
                 }
-                if(s.length()>0)
-                    s = s.substring(0, s.length() - 1);
-                else s="No Match";
-                AutoComplete.setText(s);
+                AutoComplete.setText(words);
                 AutoComplete.show(stage);
                 event.consume();
             }
