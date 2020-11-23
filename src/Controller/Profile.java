@@ -106,28 +106,28 @@ public class Profile implements Initializable {
     void takeInterview(ActionEvent event) throws InterruptedException, IOException {
         watiforinterviewee.setText("Wating for Interviewee");
         Interviewer.ss = null;
-//        while (true) {
-//            try {
-//                Interviewer.ss = new Socket("localhost", 3000);
-//                if (Interviewer.ss != null) {
-//                    System.out.println("server connected");
-//
-//                    break;
-//                }
-//            } catch (IOException e) {
-//                Thread.sleep(1000);
-//            }
-//            System.out.println("Waiting");
-//        }
-//        Interviewer.dis = new DataInputStream(Interviewer.ss.getInputStream());
-//        Interviewer.dos = new DataOutputStream(Interviewer.ss.getOutputStream());
+        while (true) {
+            try {
+                Interviewer.ss = new Socket("localhost", 3000);
+                if (Interviewer.ss != null) {
+                    System.out.println("server connected");
+
+                    break;
+                }
+            } catch (IOException e) {
+                Thread.sleep(1000);
+            }
+            System.out.println("Waiting");
+        }
+        Interviewer.dis = new DataInputStream(Interviewer.ss.getInputStream());
+        Interviewer.dos = new DataOutputStream(Interviewer.ss.getOutputStream());
         Parent root = FXMLLoader.load(getClass().getResource("/UI/InterViewer.fxml"));
         Scene scene = new Scene(root);
         scene.getStylesheets().add(KeywordsAsync.class.getResource("/UI/themes/Light.css").toExternalForm());
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.hide();
         stage.setScene(scene);
-        stage.setTitle("InterCode");
+        stage.setTitle("Interviewer");
         stage.focusedProperty().addListener(new ChangeListener<Boolean>() {
             @Override
             public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
@@ -153,19 +153,39 @@ public class Profile implements Initializable {
 
     @FXML
     void giveInterview(ActionEvent event) throws IOException {
-//        Interviewee.ss = new ServerSocket(3000);
-//        watiforinterviewer.setText("Wating for Intervieweer");
-//        Interviewee.s = Interviewee.ss.accept();
-//        Interviewee.dis = new DataInputStream(Interviewee.s.getInputStream());
-//        Interviewee.dos = new DataOutputStream(Interviewee.s.getOutputStream());
-//        Parent root = FXMLLoader.load(getClass().getResource("/UI/Interviewee.fxml"));
-//        Scene scene = new Scene(root);
-//        scene.getStylesheets().add(KeywordsAsync.class.getResource("/UI/themes/Light.css").toExternalForm());
-//        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-//        stage.hide();
-//        stage.setScene(scene);
-//        stage.setTitle("InterCode");
-//        stage.show();
+        Interviewee.ss = new ServerSocket(3000);
+        watiforinterviewer.setText("Wating for Intervieweer");
+        Interviewee.s = Interviewee.ss.accept();
+        Interviewee.dis = new DataInputStream(Interviewee.s.getInputStream());
+        Interviewee.dos = new DataOutputStream(Interviewee.s.getOutputStream());
+        Parent root = FXMLLoader.load(getClass().getResource("/UI/Interviewee.fxml"));
+        Scene scene = new Scene(root);
+        scene.getStylesheets().add(KeywordsAsync.class.getResource("/UI/themes/Light.css").toExternalForm());
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.hide();
+        stage.setScene(scene);
+        stage.setTitle("Interviewee");
+        stage.focusedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+                if (!newValue) {
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    ScreenShoot screenshoot = new ScreenShoot();
+                    screenshoot.capture();
+                    try {
+                        Thread.sleep(200);
+                    } catch (InterruptedException ex) {
+                        Logger.getLogger(Interviewer.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
+        stage.show();
+        stage.show();
     }
 
     @Override
