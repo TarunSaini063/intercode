@@ -1,6 +1,7 @@
 package Controller;
 
 import Controller.KeywordsAsync;
+import Utilities.Parse_Message;
 import Utilities.Trie;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -18,8 +19,11 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.function.IntFunction;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import static javafx.application.Application.setUserAgentStylesheet;
@@ -42,9 +46,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.HBox;
@@ -54,7 +61,6 @@ import javafx.scene.shape.Polygon;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
-import org.fxmisc.richtext.InlineCssTextArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
@@ -83,7 +89,8 @@ public class Interviewee implements Initializable {
     String currentWord = "";
     @FXML
     private Label C;
-
+    @FXML
+    private VBox content;
     @FXML
     private Label CPP;
 
@@ -98,8 +105,6 @@ public class Interviewee implements Initializable {
 
     @FXML
     private JFXTextArea input;
-    @FXML
-    private InlineCssTextArea Chat_window;
     @FXML
     private TextArea Current_Message;
     @FXML
@@ -202,70 +207,55 @@ public class Interviewee implements Initializable {
                 String msg = dis.readUTF();
                 String msg1 = msg;
                 System.out.println("read message= " + msg);
-                if (msg1.startsWith("Message")) {
-                    int end = 7, start = 7;
-                    int len = msg1.length();
-                    for (; start < len; start++) {
-                        if (msg1.charAt(start) == ' ' || msg1.charAt(start) == '\n') {
-                            break;
-                        }
-                    }
-                    String name = msg1.substring(start, end);
-                    msg1 = msg1.substring(end);
-                    String[] mess = msg1.split("\\r?\\n");
-                    String background, background1;
-//        Chat_window.setStyle("-fx-font-size: 25px;");
-                    if (flip % 2 == 0) {
-                        background = "-rtfx-background-color: green;";
-                        background1 = "-rtfx-background-color: blue; ";
-                        flip++;
-                    } else {
-                        background = "-rtfx-background-color: red;";
-                        background1 = "-rtfx-background-color: blue; ";
-                        flip++;
-                    }
-                    String message = name + System.lineSeparator();
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            Chat_window.appendText(message);
-                            Chat_window.setStyle(line_number, 0, name.length(), background);
-                        }
-                    });
-                    line_number++;
-                    for (String lines : mess) {
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                Chat_window.appendText(lines + System.lineSeparator());
-                                Chat_window.setStyle(line_number, 0, lines.length(), background1);
-                            }
-                        });
-                        line_number++;
-                    }
-                    String background3 = "-fx-background-color: #6699cc;";
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            Chat_window.setStyle(background3);
-                            Chat_window.appendText(System.lineSeparator());
-                        }
-                    });
-                    line_number++;
-                    continue;
+                Parse_Message parse_message = Parse_Message.getInstance();
+                parse_message.setMessage(msg);
+                if (parse_message.isMessage()) {
+                    setMessage(parse_message.getMessage());
                 } else {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            editor.replaceText(msg);
+                             System.out.println("Message received after parsing \n"+parse_message.getMessage());
+//                            editor.replaceText(parse_message.getMessage());
                         }
                     });
                 }
-
                 Thread.sleep(100);
             }
         }
     };
+
+    void setMessage(String name) {
+        System.out.println("Message received "+name);
+        final Random rng = new Random();
+        AnchorPane anchorPane = new AnchorPane();
+        String style = String.format("-fx-background: rgb(%d, %d, %d);"
+                + "-fx-background-color: -fx-background;",
+                rng.nextInt(256),
+                rng.nextInt(256),
+                rng.nextInt(256));
+        anchorPane.setStyle(style);
+        Label label = new Label(name);
+        label.setWrapText(true);
+        label.setMaxWidth(300);
+        FileInputStream input = null;
+        try {
+            input = new FileInputStream("/home/tarun/Desktop/JavaDev/intercode/src/Image/user1.png");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Interviewer.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        Image image = new Image(input);
+        ImageView button = new ImageView(image);
+        button.setFitHeight(70);
+        button.setFitWidth(70);
+        AnchorPane.setLeftAnchor(button, 5.0);
+        AnchorPane.setTopAnchor(button, 5.0);
+        AnchorPane.setRightAnchor(label, 5.0);
+        AnchorPane.setTopAnchor(label, 5.0);
+        AnchorPane.setBottomAnchor(label, 5.0);
+        anchorPane.getChildren().addAll(label, button);
+        content.getChildren().add(anchorPane);
+    }
 
     private class BoundsPopup extends Popup {
 
@@ -385,69 +375,44 @@ public class Interviewee implements Initializable {
 
     @FXML
     void Send_Message(MouseEvent event) {
-        String background, background1;
-//        Chat_window.setStyle("-fx-font-size: 25px;");
-        if (flip % 2 == 0) {
-            background = "-rtfx-background-color: green;";
-            background1 = "-rtfx-background-color: blue; ";
-            flip++;
-        } else {
-            background = "-rtfx-background-color: red;";
-            background1 = "-rtfx-background-color: blue; ";
-            flip++;
-        }
-        String name = "Tarun ";
-        String mess[] = Current_Message.getText().split("\\r?\\n");
-        String message = name + System.lineSeparator();
-        Chat_window.appendText(message);
-        Chat_window.setStyle(line_number, 0, name.length(), background);
-        line_number++;
-        name = "Message " + name;
-        for (String lines : mess) {
-            name = name + lines + System.lineSeparator();
-            Chat_window.appendText(lines + System.lineSeparator());
-            Chat_window.setStyle(line_number, 0, lines.length(), background1);
-            line_number++;
-        }
-        String background3 = "-fx-background-color: #6699cc;";
-        Chat_window.setStyle(background3);
-        line_number++;
-        Chat_window.appendText(System.lineSeparator());
+        final Random rng = new Random();
+        String name = Current_Message.getText();
         Current_Message.setText("");
+        AnchorPane anchorPane = new AnchorPane();
+        String style = String.format("-fx-background: rgb(%d, %d, %d);"
+                + "-fx-background-color: -fx-background;",
+                rng.nextInt(256),
+                rng.nextInt(256),
+                rng.nextInt(256));
+        anchorPane.setStyle(style);
+        Label label = new Label(name);
+        label.setWrapText(true);
+        label.setMaxWidth(300);
+        FileInputStream input = null;
         try {
-            dos.writeUTF(name);
-            dos.flush();
-            System.out.println("send message: " + name);
-        } catch (IOException ex) {
-//                Logger.getLogger(layoutController.class.getName()).log(Level.SEVERE, null, ex);
+            input = new FileInputStream("/home/tarun/Desktop/JavaDev/intercode/src/Image/user1.png");
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(Interviewer.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
-
-    void Message_received(String[] mess, String name) {
-        String background, background1;
-//        Chat_window.setStyle("-fx-font-size: 25px;");
-        if (flip % 2 == 0) {
-            background = "-rtfx-background-color: green;";
-            background1 = "-rtfx-background-color: blue; ";
-            flip++;
-        } else {
-            background = "-rtfx-background-color: red;";
-            background1 = "-rtfx-background-color: blue; ";
-            flip++;
-        }
-        String message = name + System.lineSeparator();
-        Chat_window.appendText(message);
-        Chat_window.setStyle(line_number, 0, name.length(), background);
-        line_number++;
-        for (String lines : mess) {
-            Chat_window.appendText(lines + System.lineSeparator());
-            Chat_window.setStyle(line_number, 0, lines.length(), background1);
-            line_number++;
-        }
-        String background3 = "-fx-background-color: #6699cc;";
-        Chat_window.setStyle(background3);
-        line_number++;
-        Chat_window.appendText(System.lineSeparator());
+        Image image = new Image(input);
+        ImageView button = new ImageView(image);
+        button.setFitHeight(70);
+        button.setFitWidth(70);
+        AnchorPane.setLeftAnchor(button, 5.0);
+        AnchorPane.setTopAnchor(button, 5.0);
+        AnchorPane.setRightAnchor(label, 5.0);
+        AnchorPane.setTopAnchor(label, 5.0);
+        AnchorPane.setBottomAnchor(label, 5.0);
+        anchorPane.getChildren().addAll(label, button);
+        content.getChildren().add(anchorPane);
+        name = "Message\nTarun\n" + name;
+//        try {
+//            dos.writeUTF(name);
+//            dos.flush();
+//            System.out.println("send message: " + name);
+//        } catch (IOException ex) {
+////                Logger.getLogger(layoutController.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     @FXML
@@ -668,7 +633,8 @@ public class Interviewee implements Initializable {
     @FXML
     void onwriting(KeyEvent event) {
         try {
-            dos.writeUTF(editor.getText());
+            String mess="Editor\n"+editor.getText();
+            dos.writeUTF(mess);
             dos.flush();
             System.out.println("send message: " + editor.getText());
         } catch (IOException ex) {
