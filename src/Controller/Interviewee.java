@@ -1,7 +1,6 @@
 package Controller;
 
 import Controller.KeywordsAsync;
-import Utilities.Parse_Message;
 import Utilities.Trie;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
@@ -77,6 +76,7 @@ import org.reactfx.value.Var;
  */
 public class Interviewee implements Initializable {
 
+    String current_user = Profile.current_user;
     static ServerSocket ss = null;
     static Socket s;
     static DataInputStream dis = null;
@@ -205,56 +205,63 @@ public class Interviewee implements Initializable {
             int i = 0;
             while (true) {
                 String msg = dis.readUTF();
-                String msg1 = msg;
+                String msg1 = msg.substring(6);
                 System.out.println("read message= " + msg);
-                Parse_Message parse_message = Parse_Message.getInstance();
-                parse_message.setMessage(msg);
-                if (parse_message.isMessage()) {
-                    setMessage(parse_message.getMessage());
-                } else {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                             System.out.println("Message received after parsing \n"+parse_message.getMessage());
-//                            editor.replaceText(parse_message.getMessage());
-                        }
-                    });
+                if (msg.startsWith("Message")) {
+                    System.out.println("chat Message ");
+                    msg = msg.substring(7);
+                    setMessage(msg);
+                    continue;
                 }
+                System.out.println("Editor Message ");
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("read message= " + msg1);
+                            editor.replaceText(msg1);
+                    }
+                });
                 Thread.sleep(100);
             }
         }
     };
 
     void setMessage(String name) {
-        System.out.println("Message received "+name);
-        final Random rng = new Random();
-        AnchorPane anchorPane = new AnchorPane();
-        String style = String.format("-fx-background: rgb(%d, %d, %d);"
-                + "-fx-background-color: -fx-background;",
-                rng.nextInt(256),
-                rng.nextInt(256),
-                rng.nextInt(256));
-        anchorPane.setStyle(style);
-        Label label = new Label(name);
-        label.setWrapText(true);
-        label.setMaxWidth(300);
-        FileInputStream input = null;
-        try {
-            input = new FileInputStream("/home/tarun/Desktop/JavaDev/intercode/src/Image/user1.png");
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Interviewer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Image image = new Image(input);
-        ImageView button = new ImageView(image);
-        button.setFitHeight(70);
-        button.setFitWidth(70);
-        AnchorPane.setLeftAnchor(button, 5.0);
-        AnchorPane.setTopAnchor(button, 5.0);
-        AnchorPane.setRightAnchor(label, 5.0);
-        AnchorPane.setTopAnchor(label, 5.0);
-        AnchorPane.setBottomAnchor(label, 5.0);
-        anchorPane.getChildren().addAll(label, button);
-        content.getChildren().add(anchorPane);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Message received " + name);
+                final Random rng = new Random();
+                AnchorPane anchorPane = new AnchorPane();
+                String style = String.format("-fx-background: rgb(%d, %d, %d);"
+                        + "-fx-background-color: -fx-background;",
+                        rng.nextInt(256),
+                        rng.nextInt(256),
+                        rng.nextInt(256));
+                anchorPane.setStyle(style);
+                Label label = new Label(name);
+                label.setWrapText(true);
+                label.setMaxWidth(300);
+                FileInputStream input = null;
+                try {
+                    input = new FileInputStream("/home/tarun/Desktop/JavaDev/intercode/src/Image/user1.png");
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Interviewer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                Image image = new Image(input);
+                ImageView button = new ImageView(image);
+                button.setFitHeight(70);
+                button.setFitWidth(70);
+                AnchorPane.setLeftAnchor(button, 5.0);
+                AnchorPane.setTopAnchor(button, 5.0);
+                AnchorPane.setRightAnchor(label, 5.0);
+                AnchorPane.setTopAnchor(label, 5.0);
+                AnchorPane.setBottomAnchor(label, 5.0);
+                anchorPane.getChildren().addAll(label, button);
+                content.getChildren().add(anchorPane);
+            }
+        });
+
     }
 
     private class BoundsPopup extends Popup {
@@ -405,14 +412,14 @@ public class Interviewee implements Initializable {
         AnchorPane.setBottomAnchor(label, 5.0);
         anchorPane.getChildren().addAll(label, button);
         content.getChildren().add(anchorPane);
-        name = "Message\nTarun\n" + name;
-//        try {
-//            dos.writeUTF(name);
-//            dos.flush();
-//            System.out.println("send message: " + name);
-//        } catch (IOException ex) {
-////                Logger.getLogger(layoutController.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        name = "Message\n" + current_user + "\n" + name;
+        try {
+            dos.writeUTF(name);
+            dos.flush();
+            System.out.println("send message: " + name);
+        } catch (IOException ex) {
+//                Logger.getLogger(layoutController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     @FXML
@@ -633,7 +640,7 @@ public class Interviewee implements Initializable {
     @FXML
     void onwriting(KeyEvent event) {
         try {
-            String mess="Editor\n"+editor.getText();
+            String mess = "Editor\n" + editor.getText();
             dos.writeUTF(mess);
             dos.flush();
             System.out.println("send message: " + editor.getText());

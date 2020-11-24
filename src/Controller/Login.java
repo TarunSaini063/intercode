@@ -72,26 +72,26 @@ public class Login implements Initializable {
 
     @FXML
     void Login(ActionEvent event) throws IOException, ClassNotFoundException, SQLException {
-//        System.out.println("Try to connect database again");
-//        Class.forName("com.mysql.jdbc.Driver");
-//        String url = "jdbc:mysql://localhost:3306/users";
-//        Connection connection = DriverManager.getConnection(url, "root", "");
-//        String query3 = "SELECT * FROM users";
-//        PreparedStatement preStat = connection.prepareStatement(query3);
-//        int status = 0;
-//        ResultSet result = preStat.executeQuery();
-//        while (result.next()) {
-//            String username = result.getString("email");
-//            String pass = result.getString("password");
-//            System.out.println("Username= "+username);
-//            System.out.println(" pass= "+pass);
-//            if ((username.equals(UserName.getText())) && (pass.equals(Password.getText()))) {
-//                status = 1;
-//                System.out.println("Login successfull");
-//                break;
-//            }
-//        }
-//        if (status == 1) {
+        System.out.println("Try to connect database again");
+        Class.forName("com.mysql.jdbc.Driver");
+        String url = "jdbc:mysql://localhost:3306/InterCode";
+        Connection connection = DriverManager.getConnection(url, "root", "root");
+        String query3 = "SELECT * FROM Users";
+        PreparedStatement preStat = connection.prepareStatement(query3);
+        int status = 0;
+        ResultSet result = preStat.executeQuery();
+        while (result.next()) {
+            String email = result.getString("email");
+            String pass = result.getString("password");
+            System.out.println("email= "+email);
+            System.out.println(" pass= "+pass);
+            if ((email.equals(UserName.getText())) && (pass.equals(Password.getText()))) {
+                status = 1;
+                System.out.println("Login successfull");
+                break;
+            }
+        }
+        if (status == 1) {
             Profile.current_user=UserName.getText();
             Parent root = FXMLLoader.load(getClass().getResource("/UI/Profile.fxml"));
             Scene scene = new Scene(root);
@@ -100,11 +100,11 @@ public class Login implements Initializable {
             stg.hide();
             stg.setScene(scene);
             stg.show();
-//        }
-//        else
-//        {
-//            System.out.println("new User");
-//        }
+        }
+        else
+        {
+            System.out.println("new User");
+        }
     }
 
     @FXML

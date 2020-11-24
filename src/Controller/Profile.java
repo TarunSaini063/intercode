@@ -21,6 +21,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -33,6 +34,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
@@ -60,9 +63,6 @@ public class Profile implements Initializable {
 
     @FXML
     private JFXTextField Address1;
-
-    @FXML
-    private JFXTextField Address2;
 
     @FXML
     private JFXTextField Github;
@@ -98,13 +98,31 @@ public class Profile implements Initializable {
     private Label watiforinterviewee;
 
     @FXML
-    void Saveprofile(ActionEvent event) {
-        System.out.println("Do not save changes");
+    void Saveprofile(ActionEvent event) throws ClassNotFoundException, SQLException {
+        Class.forName("com.mysql.jdbc.Driver");
+        String url = "jdbc:mysql://localhost:3306/InterCode";
+        Connection connection = DriverManager.getConnection(url, "root", "root");
+        PreparedStatement update = connection.prepareStatement("UPDATE Users SET mobile = ?, github = ?, linkedin = ?, qualification = ?, skills = ?, address = ? WHERE email = ?");
+        update.setString(1, Mobile.getText());
+        update.setString(2, Github.getText());
+        update.setString(3, Linkedin.getText());
+        update.setString(4, Qualification.getText());
+        update.setString(5, Skill.getText());
+        update.setString(6, Address1.getText());
+        update.setString(7, Email.getText());
+        update.executeUpdate();
+        System.out.println("Update Successfully");
+        Alert sameclient = new Alert(AlertType.INFORMATION);  //Alert is shown 
+        sameclient.setTitle("Updates");
+        sameclient.setContentText("Successfully update");
+        sameclient.setHeaderText("Hello " + Name.getText());
+        sameclient.show();
     }
 
     @FXML
     void takeInterview(ActionEvent event) throws InterruptedException, IOException {
         watiforinterviewee.setText("Wating for Interviewee");
+        current_user=Name.getText();
         Interviewer.ss = null;
         while (true) {
             try {
@@ -154,6 +172,7 @@ public class Profile implements Initializable {
     @FXML
     void giveInterview(ActionEvent event) throws IOException {
         Interviewee.ss = new ServerSocket(3000);
+        current_user=Name.getText();
         watiforinterviewer.setText("Wating for Intervieweer");
         Interviewee.s = Interviewee.ss.accept();
         Interviewee.dis = new DataInputStream(Interviewee.s.getInputStream());
@@ -198,59 +217,57 @@ public class Profile implements Initializable {
         Linkedin.setStyle("-fx-text-inner-color: white");
         Email.setStyle("-fx-text-inner-color: white");
         Address1.setStyle("-fx-text-inner-color: white");
-        Address2.setStyle("-fx-text-inner-color: white");
         watiforinterviewee.setStyle("-fx-text-inner-color: white");
         watiforinterviewer.setStyle("-fx-text-inner-color: white");
         Name.setDisable(true);
         Email.setDisable(true);
-//        System.out.println("Finding Current user");
-//
-//        try {
-//            Class.forName("com.mysql.jdbc.Driver");
-//        } catch (ClassNotFoundException ex) {
-//            Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        String url = "jdbc:mysql://localhost:3306/users";
-//        Connection connection = null;
-//        try {
-//            connection = DriverManager.getConnection(url, "root", "");
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        String query3 = "SELECT * FROM users";
-//        PreparedStatement preStat = null;
-//        try {
-//            preStat = connection.prepareStatement(query3);
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        int status = 0;
-//        ResultSet result = null;
-//        try {
-//            result = preStat.executeQuery();
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
-//        }
-//        try {
-//            while (result.next()) {
-//                String email = result.getString("email");
-//                if (current_user.equals(email)) {
-//                    Name.setText(result.getString("name"));
-//                    Github.setText(result.getString("github"));
-//                    Linkedin.setText(result.getString("linkedin"));
-//                    Address1.setText(result.getString("address1"));
-//                    Address2.setText(result.getString("address2"));
-//                    Skill.setText(result.getString("skill"));
-//                    Qualification.setText(result.getString("qualification"));
-//                    Mobile.setText(result.getString("mobile"));
-//                    Email.setText(email);
-//                    System.out.println("Current user caught");
-//                    break;
-//                }
-//            }
-//        } catch (SQLException ex) {
-//            Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        System.out.println("Finding Current user");
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String url = "jdbc:mysql://localhost:3306/InterCode";
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(url, "root", "root");
+        } catch (SQLException ex) {
+            Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String query3 = "SELECT * FROM Users";
+        PreparedStatement preStat = null;
+        try {
+            preStat = connection.prepareStatement(query3);
+        } catch (SQLException ex) {
+            Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        int status = 0;
+        ResultSet result = null;
+        try {
+            result = preStat.executeQuery();
+        } catch (SQLException ex) {
+            Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            while (result.next()) {
+                String email = result.getString("email");
+                if (current_user.equals(email)) {
+                    Name.setText(result.getString("name"));
+                    Github.setText(result.getString("github"));
+                    Linkedin.setText(result.getString("linkedin"));
+                    Address1.setText(result.getString("address"));
+                    Skill.setText(result.getString("skills"));
+                    Qualification.setText(result.getString("qualification"));
+                    Mobile.setText(result.getString("mobile"));
+                    Email.setText(email);
+                    System.out.println("Current user caught");
+                    break;
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Profile.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
 }

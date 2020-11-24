@@ -7,7 +7,7 @@ package Controller;
 
 //import static Controller.Interviewee.dis;
 import Controller.KeywordsAsync;
-import Utilities.Parse_Message;
+import static Controller.Profile.current_user;
 import Utilities.ScreenShoot;
 import Utilities.Trie;
 import com.jfoenix.controls.JFXButton;
@@ -93,6 +93,7 @@ import org.reactfx.value.Var;
 public class Interviewer implements Initializable {
 
     static Socket ss;
+    String current_user = Profile.current_user;
     static DataInputStream dis = null;
     static DataOutputStream dos = null;
     Compile compiler = new Compile();
@@ -332,55 +333,63 @@ public class Interviewer implements Initializable {
             int i = 0;
             while (true) {
                 String msg = dis.readUTF();
-                String msg1 = msg;
+                String msg1 = msg.substring(6);
                 System.out.println("read message= " + msg);
-                Parse_Message parse_message = Parse_Message.getInstance();
-                parse_message.setMessage(msg);
-                if (parse_message.isMessage()) {
-                    setMessage(parse_message.getMessage());
-                } else {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            editor.replaceText(parse_message.getMessage());
-                        }
-                    });
+                if (msg.startsWith("Message")) {
+                    System.out.println("chat Message ");
+                    msg = msg.substring(7);
+                    setMessage(msg);
+                    continue;
                 }
+                System.out.println("Editor Message ");
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        System.out.println("read message= " + msg1);
+                            editor.replaceText(msg1);
+                    }
+                });
                 Thread.sleep(100);
             }
         }
     };
 
     void setMessage(String name) {
-        System.out.println("Message received " + name);
-        final Random rng = new Random();
-        AnchorPane anchorPane = new AnchorPane();
-        String style = String.format("-fx-background: rgb(%d, %d, %d);"
-                + "-fx-background-color: -fx-background;",
-                rng.nextInt(256),
-                rng.nextInt(256),
-                rng.nextInt(256));
-        anchorPane.setStyle(style);
-        Label label = new Label(name);
-        label.setWrapText(true);
-        label.setMaxWidth(300);
-        FileInputStream input = null;
-        try {
-            input = new FileInputStream("/home/tarun/Desktop/JavaDev/intercode/src/Image/user1.png");
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(Interviewer.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        Image image = new Image(input);
-        ImageView button = new ImageView(image);
-        button.setFitHeight(70);
-        button.setFitWidth(70);
-        AnchorPane.setLeftAnchor(button, 5.0);
-        AnchorPane.setTopAnchor(button, 5.0);
-        AnchorPane.setRightAnchor(label, 5.0);
-        AnchorPane.setTopAnchor(label, 5.0);
-        AnchorPane.setBottomAnchor(label, 5.0);
-        anchorPane.getChildren().addAll(label, button);
-        content.getChildren().add(anchorPane);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                System.out.println("Message received " + name);
+                final Random rng = new Random();
+                AnchorPane anchorPane = new AnchorPane();
+                String style = String.format("-fx-background: rgb(%d, %d, %d);"
+                        + "-fx-background-color: -fx-background;",
+                        rng.nextInt(256),
+                        rng.nextInt(256),
+                        rng.nextInt(256));
+                anchorPane.setStyle(style);
+                Label label = new Label(name);
+                label.setWrapText(true);
+                label.setMaxWidth(300);
+                FileInputStream input = null;
+                try {
+                    input = new FileInputStream("/home/tarun/Desktop/JavaDev/intercode/src/Image/user1.png");
+                } catch (FileNotFoundException ex) {
+                    Logger.getLogger(Interviewer.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                Image image = new Image(input);
+                ImageView button = new ImageView(image);
+                button.setFitHeight(70);
+                button.setFitWidth(70);
+                AnchorPane.setLeftAnchor(button, 5.0);
+                AnchorPane.setTopAnchor(button, 5.0);
+                AnchorPane.setRightAnchor(label, 5.0);
+                AnchorPane.setTopAnchor(label, 5.0);
+                AnchorPane.setBottomAnchor(label, 5.0);
+                anchorPane.getChildren().addAll(label, button);
+                content.getChildren().add(anchorPane);
+            }
+        });
+
     }
 
     @FXML
@@ -415,7 +424,7 @@ public class Interviewer implements Initializable {
         AnchorPane.setBottomAnchor(label, 5.0);
         anchorPane.getChildren().addAll(label, button);
         content.getChildren().add(anchorPane);
-        name = "Message\nTarun\n" + name;
+        name = "Message" + current_user + "\n" + name;
         try {
             dos.writeUTF(name);
             dos.flush();
@@ -650,11 +659,11 @@ public class Interviewer implements Initializable {
     @FXML
     void onwriting(KeyEvent event) {
         String mess = editor.getText();
-        mess = "Editor\n" + mess;
+        mess = "Editor" + mess;
         try {
             dos.writeUTF(mess);
             dos.flush();
-            System.out.println("send message: " + editor.getText());
+            System.out.println("send message: " +mess);
         } catch (IOException ex) {
 //                Logger.getLogger(layoutController.class.getName()).log(Level.SEVERE, null, ex);
         }

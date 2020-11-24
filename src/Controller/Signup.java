@@ -48,9 +48,9 @@ public class Signup implements Initializable {
     void CreateAccount(ActionEvent event) throws ClassNotFoundException, SQLException, IOException {
         if(Password.getText().equals(Confpassword.getText())){
             Class.forName("com.mysql.jdbc.Driver");
-            String url = "jdbc:mysql://localhost:3306/users";
-            Connection connection = DriverManager.getConnection(url, "root", "");
-            String query1 = "INSERT INTO `users` (`email`,`name`,`password`)" + " VALUES ('" + Email.getText() + "', '" + Name.getText() + "','" + Password.getText() + "')";
+            String url = "jdbc:mysql://localhost:3306/InterCode";
+            Connection connection = DriverManager.getConnection(url, "root", "root");
+            String query1 = "INSERT INTO `Users` (`email`,`name`,`password`)" + " VALUES ('" + Email.getText() + "', '" + Name.getText() + "','" + Password.getText() + "')";
             PreparedStatement preStat = connection.prepareStatement(query1);
             preStat.executeUpdate();
             System.out.println("new user created");
