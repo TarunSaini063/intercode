@@ -5,13 +5,14 @@
 <?import com.jfoenix.controls.JFXTextArea?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import org.fxmisc.richtext.CodeArea?>
-<?import org.fxmisc.richtext.InlineCssTextArea?>
 
 <AnchorPane id="AnchorPane" prefHeight="933.0" prefWidth="1355.0" style="-fx-background-color: #2F3445;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Controller.Interviewer">
    <children>
@@ -85,8 +86,12 @@
             <Font size="24.0" />
          </font>
       </JFXButton>
-      <InlineCssTextArea fx:id="Chat_window" layoutX="1368.0" layoutY="746.0" prefHeight="128.0" prefWidth="517.0" style="-fx-background-color: #6699cc;" />
       <Button fx:id="Send_Message" layoutX="1812.0" layoutY="879.0" mnemonicParsing="false" onMouseClicked="#Send_Message" prefHeight="45.0" prefWidth="86.0" style="-fx-background-color: #6670cc;" text="Send" />
       <TextArea fx:id="Current_Message" layoutX="1368.0" layoutY="879.0" prefHeight="61.0" prefWidth="423.0" style="-fx-background-color: #6699cc;" />
+      <ScrollPane fitToWidth="true" layoutX="1367.0" layoutY="729.0" prefHeight="137.0" prefWidth="524.0">
+         <content>
+            <VBox fx:id="content" prefHeight="138.0" prefWidth="520.0" />
+         </content>
+      </ScrollPane>
    </children>
 </AnchorPane>

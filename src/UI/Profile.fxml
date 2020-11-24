@@ -43,10 +43,6 @@
          <font>
             <Font size="18.0" />
          </font></JFXTextField>
-      <JFXTextField fx:id="Address2" focusColor="#304abf" layoutX="491.0" layoutY="325.0" prefHeight="31.0" prefWidth="439.0" unFocusColor="#2509dd">
-         <font>
-            <Font size="18.0" />
-         </font></JFXTextField>
       <Label layoutX="455.0" layoutY="383.0" text="GitHub" textFill="WHITE">
          <font>
             <Font size="24.0" />
