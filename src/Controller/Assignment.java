@@ -8,7 +8,6 @@ package Controller;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -52,9 +51,10 @@ public class Assignment {
                 System.out.println(btn.getId());
                 Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
                 int Assignmentid;
-                Assignmentid = Integer.parseInt(btn.getId()) + 1;
+                Assignmentid = Integer.parseInt(btn.getId());
                 UpdateAssignment updateAssignemnt = new UpdateAssignment();
                 try {
+                    System.out.println(Assignmentid+" user= "+user);
                     updateAssignemnt.initialize(Assignmentid, user);
                 } catch (IOException ex) {
                     Logger.getLogger(Assignment.class.getName()).log(Level.SEVERE, null, ex);
@@ -112,7 +112,6 @@ public class Assignment {
         user = usr;
         System.out.println("User in inilz "+user);
         AssignmentCount = 0;
-//        Change(10);
     }
 
 }
