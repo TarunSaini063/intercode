@@ -8,5 +8,6 @@
    <children>
       <VBox fx:id="stack" layoutY="26.0" prefHeight="772.0" prefWidth="1000.0" style="-fx-background-color: #2F3445; -fx-padding: 10;" />
       <Button fx:id="fetch" layoutX="843.0" layoutY="1.0" mnemonicParsing="false" onAction="#fetchassignment" text="Fetch Assignment" />
+      <Button fx:id="upload" layoutX="690.0" layoutY="1.0" mnemonicParsing="false" onAction="#upload" text="Upload Assignment" />
    </children>
 </AnchorPane>
