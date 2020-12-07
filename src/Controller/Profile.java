@@ -120,9 +120,20 @@ public class Profile implements Initializable {
     }
 
     @FXML
+    void submitassignment(ActionEvent event) throws IOException {
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        String user;
+        user = Email.getText();
+        System.out.println(user);
+        stage.close();
+        Assignment assignment = new Assignment();
+        assignment.initialize(user);        
+    }
+
+    @FXML
     void takeInterview(ActionEvent event) throws InterruptedException, IOException {
         watiforinterviewee.setText("Wating for Interviewee");
-        current_user=Name.getText();
+        current_user = Name.getText();
         Interviewer.ss = null;
         while (true) {
             try {
@@ -172,7 +183,7 @@ public class Profile implements Initializable {
     @FXML
     void giveInterview(ActionEvent event) throws IOException {
         Interviewee.ss = new ServerSocket(3000);
-        current_user=Name.getText();
+        current_user = Name.getText();
         watiforinterviewer.setText("Wating for Intervieweer");
         Interviewee.s = Interviewee.ss.accept();
         Interviewee.dis = new DataInputStream(Interviewee.s.getInputStream());
@@ -203,7 +214,6 @@ public class Profile implements Initializable {
                 }
             }
         });
-        stage.show();
         stage.show();
     }
 

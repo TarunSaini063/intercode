@@ -53,6 +53,9 @@ public class Signup implements Initializable {
             String query1 = "INSERT INTO `Users` (`email`,`name`,`password`)" + " VALUES ('" + Email.getText() + "', '" + Name.getText() + "','" + Password.getText() + "')";
             PreparedStatement preStat = connection.prepareStatement(query1);
             preStat.executeUpdate();
+            query1 = "INSERT INTO `Assignments` (`user`)" + " VALUES ('" + Email.getText() + "')";
+            preStat = connection.prepareStatement(query1);
+            preStat.executeUpdate();
             System.out.println("new user created");
             Parent root = FXMLLoader.load(getClass().getResource("/UI/Login.fxml"));
             Scene scene = new Scene(root);
@@ -60,6 +63,7 @@ public class Signup implements Initializable {
             stg.hide();
             stg.setScene(scene);
             stg.show();
+            connection.close();
         }
         else
         {
