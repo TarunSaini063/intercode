@@ -107,7 +107,7 @@
             <Font size="64.0" />
          </font>
       </Label>
-      <JFXButton fx:id="takeInterview" layoutX="431.0" layoutY="733.0" onAction="#takeInterview" style="-fx-background-color: #1E93F1;" text="Take Interview" textFill="WHITE">
+      <JFXButton fx:id="takeInterview" layoutX="544.0" layoutY="733.0" onAction="#takeInterview" style="-fx-background-color: #1E93F1;" text="Take Interview" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>
@@ -127,7 +127,12 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <JFXButton fx:id="giveInterview" layoutX="688.0" layoutY="733.0" onAction="#giveInterview" style="-fx-background-color: #1E93F1;" text="giveInterview" textFill="WHITE">
+      <JFXButton fx:id="giveInterview" layoutX="911.0" layoutY="733.0" onAction="#giveInterview" style="-fx-background-color: #1E93F1;" text="giveInterview" textFill="WHITE">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </JFXButton>
+      <JFXButton fx:id="Assignment" layoutX="216.0" layoutY="733.0" onAction="#submitassignment" style="-fx-background-color: #1E93F1;" text="Assignment" textFill="WHITE">
          <font>
             <Font size="18.0" />
          </font>
