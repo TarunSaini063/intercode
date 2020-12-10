@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="671.0" prefWidth="878.0" style="-fx-background-color: #2F3445;" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8.0.171" fx:controller="Controller.Piechart">
+   <children>
+      <PieChart fx:id="piechart" layoutX="174.0" layoutY="66.0" style="-fx-background-color: white;" title="Similarities" />
+   </children>
+</AnchorPane>
